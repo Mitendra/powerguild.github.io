@@ -3,7 +3,10 @@ layout: post
 title:  "From startup to web scale: A gentle introduction to scaling"
 date:   2018-06-19 08:43:56 -0800
 categories: medium blogs
----
+---  
+  
+![](/assets/images/highrise.png)  
+  
 
 This post is a gentle introduction to the concepts of scaling a web service and different phases it goes through. Subsequent posts will have more details about many of these concepts introduced here. 
   
