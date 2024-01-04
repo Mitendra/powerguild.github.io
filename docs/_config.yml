@@ -28,7 +28,7 @@ twitter_username: mitendra_mahto
 github_username:  Mitendra
 
 # Build settings
-theme: Modernist
+theme: minima
 plugins:
   - jekyll-feed
 
