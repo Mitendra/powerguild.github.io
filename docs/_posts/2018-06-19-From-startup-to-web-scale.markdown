@@ -71,9 +71,10 @@ It’s continuing to grow at enormous pace and it seems the number of writes per
 Each db can take only a finite load and even after upgrading the hardwares, you don’t see it can fit the scale you need. You do some research and find the only way out is having multiple dbs each serving a fraction of work load. You like this idea of sharding. You have just finished your analysis and it seems you have found that you need to have one sharding key which will decide which target database the data needs to be written to or read from. You already have read and write services for accessing database so it would be a bit simpler for you. You have analyzed all your read and write patterns and figured out that you can shard the db based on Account Number. You are going to make sure all the read queries have account number as one of the key. Similarly every write must have an account number. You are also going to have a separation between physical shards and logical shards, so that you can start with less number of physical databases but eventually scale out to more databases as and when need arises.
 With this you have kind of reached to the limit of maximum scale that probably your app can have.
 If you need further scale, probably a split of your company may be the next option!
-## References:
-[How To Set Up Nginx Load Balancing]: https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-load-balancing
-[Microservices need to honor contracts]: https://www.infoworld.com/article/3198149/microservices-need-to-honor-contracts.html
-[Microservices: Handling eventual consistency]: https://softwareengineering.stackexchange.com/questions/354911/microservices-handling-eventual-consistency
-[Eventual consistency]: https://en.wikipedia.org/wiki/Eventual_consistency
-[Database sharding explained in plain English]: https://www.citusdata.com/blog/2018/01/10/sharding-in-plain-english
+## References
+
+[How To Set Up Nginx Load Balancing](https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-load-balancing)  
+[Microservices need to honor contracts](https://www.infoworld.com/article/3198149/microservices-need-to-honor-contracts.html)  
+[Microservices: Handling eventual consistency](https://softwareengineering.stackexchange.com/questions/354911/microservices-handling-eventual-consistency)  
+[Eventual consistency](https://en.wikipedia.org/wiki/Eventual_consistency)  
+[Database sharding explained in plain English](https://www.citusdata.com/blog/2018/01/10/sharding-in-plain-english)  
