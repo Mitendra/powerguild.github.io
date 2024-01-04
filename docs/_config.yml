@@ -21,14 +21,14 @@
 title: Start With A Why
 email: mahto.mitendra@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Thought on software development
+  Thoughts on software development
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://startwithawhy.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: mitendra_mahto
 github_username:  Mitendra
 
 # Build settings
-theme: minima
+theme: Modernist
 plugins:
   - jekyll-feed
 
