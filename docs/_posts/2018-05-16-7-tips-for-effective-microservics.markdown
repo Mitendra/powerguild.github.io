@@ -11,7 +11,8 @@ Well designed microservices can make our life so much easier. From design to dev
   
 Here are a few simple tips to get the best out of microservices: 
   
-**1. Have a request-id/correlation-id for every request**
+**1. Have a request-id/correlation-id for every request**  
+  
 Request-id or correlation-id is a unique id assigned to each customer request. This helps tracing the flow end to end. While this seems to be a trivial idea ,in practice, this is very useful. Few scenarios where it really shines:  
 a) Debugging  
 b) Testing  
