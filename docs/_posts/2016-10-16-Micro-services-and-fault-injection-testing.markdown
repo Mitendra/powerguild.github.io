@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Micro services and Fault injection testing"
-date:   2018-06-19 08:43:56 -0800
+date:   2016-10-16 08:43:56 -0800
 categories: medium blogs
 
 ---  
