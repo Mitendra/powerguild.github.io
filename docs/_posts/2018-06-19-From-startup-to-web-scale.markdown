@@ -3,6 +3,7 @@ layout: post
 title:  "From startup to web scale: A gentle introduction to scaling"
 date:   2018-06-19 08:43:56 -0800
 categories: medium blogs
+
 ---  
   
 ![](/assets/images/highrise.png)  
