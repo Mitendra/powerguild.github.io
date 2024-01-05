@@ -95,8 +95,11 @@ The format could look like:
 **Sample code:**  
   
 **Load Balancing:**
-```
+  
 [load_balancing.lua](https://gist.github.com/Mitendra/b2eeebaac135ee1179949e66f703818b#file-load_balancing-lua) 
+  
+```
+
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = "6379"
 DEFAULT_UPSTREAM_SERVER = "127.0.0.1"
@@ -129,7 +132,9 @@ else
 ```
   
 **Fault injection:**
-[fault_injection_using_lua.lua](https://gist.github.com/Mitendra/cacdece74c78a1dd4fa208bfd4967845#file-fault_injection_using_lua-lua) 
+  
+[fault_injection_using_lua.lua](https://gist.github.com/Mitendra/cacdece74c78a1dd4fa208bfd4967845#file-fault_injection_using_lua-lua)
+  
 ```
 function has_value (tab, val)
   for index, value in ipairs (tab) do
@@ -185,4 +190,4 @@ if(req_id and ok) then
 end
 ```
 
-Githublink: https://github.com/Mitendra/fault_injection_proxy
+[Githublink](https://github.com/Mitendra/fault_injection_proxy)
