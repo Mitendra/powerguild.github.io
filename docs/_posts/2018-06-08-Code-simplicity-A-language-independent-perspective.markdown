@@ -43,7 +43,7 @@ Very often people move around and new folks have to look at the code and they ma
 
 [too_many_redirect.rb](https://gist.github.com/Mitendra/69029757a42447ed7f5e0468a79ad9cd)  
     
-```
+{% highlight ruby %}
 class URLHelper
 	def initialize
 		@seperator = '/'
@@ -100,14 +100,14 @@ end
 url = URLHelper.new.getBaseUrl("option1")
 puts url
 # https//www.samplevip.midwest.mycompany.com/option1prefix/defaultSuffix/SpecificValue
-```
+{% endhighlight %}
 
 There are lot of stuffs which are most probably not going to change. This kind of unnecessary abstraction makes it harder to get the context.
 So it might be worthy to just replace all of these with one simple method:  
 
 [simplified_redirects.rb](https://gist.github.com/Mitendra/69029757a42447ed7f5e0468a79ad9cd)  
    
-```
+{% highlight ruby %}
 class URLHelper
   def getBaseUrl(usage)
     if(usage == "option1")
@@ -117,7 +117,7 @@ class URLHelper
     end
   end
 end
-```
+{% endhighlight %}
 
 #### Easy to get the intent and the problem context  
 when it’s time to modify the existing code, the context of the problem and the intent help more than the implementation steps. So a meaningful abstraction is important.  
@@ -130,7 +130,7 @@ Here is one sample implementation.
   
 [missing_intend.rb](https://gist.github.com/Mitendra/b9cb86b48ded20f8c52c926450039954#file-missing_intend-rb)  
   
-```
+{% highlight ruby %}
 def sendEmail(numOfRows)
   if(numOfRows  == 1)
     # send an email saying, checkout errored out
@@ -138,14 +138,14 @@ def sendEmail(numOfRows)
     # send an email saying, checkout is complete
   end
 end
-```
+{% endhighlight %}
 Although this may work perfectly fine for a given condition, this doesn’t tell the intend correctly and focuses more on lot of current assumptions. If later we add a new step, this code will break. Modifying this code for a new person will be super hard as the intent of the specific steps are missing.  
   
 In these cases, an implementation with more code but with right intent may be better:  
   
 [using_intend.rb](https://gist.github.com/Mitendra/aa42393a5b419a38e0cf23460a1afef9)  
 
-```
+{% highlight ruby %}
 def sendEmail(checkoutDetails)
   if isCheckoutCompleted(checkoutDetails)
     # send an email saying checkout is complete
@@ -161,7 +161,7 @@ def isCheckoutCompleted(checkoutDetails)
     return false
   end
 end
-```
+{% endhighlight %}
 
 ### Simple is beautiful
 At the end what matters is to convey the right context and meaning. A code which is simple to read and scan through but not revealing the right intent may not be treated as simple. While languages and its feature may play an important role, if we take care of these basic things, chances are our code will still be beautiful, irrespective of what language, what paradigm or what features of a language we are using.  

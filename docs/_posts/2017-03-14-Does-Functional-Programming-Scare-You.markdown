@@ -24,8 +24,10 @@ Here we go:
 **Recursion**  
   
 There are problems where recursion is a very natural choice E.g. Fibonacci series problem or a problem involving tree traversal. The very definition of Fibonacci number, suggests a recursive solution  
-  
-> f(n) = f(n-1) + f(n-2)  
+ 
+{% highlight shell %}
+f(n) = f(n-1) + f(n-2) 
+{% endhighlight %} 
      
 Same goes with Tree traversal.  
   
@@ -45,14 +47,14 @@ Specifically if it’s a tail recursion(if the recursive call is the last call a
   
 Tail recursive version of Fibonacci number in C++
 
-```
+{% highlight ruby %}
 int fib(int term, int val = 1, int prev = 0)
 {
 if(term == 0) return prev;
 if(term == 1) return val;
 return fib(term — 1, val+prev, val);
 }
-```   
+{% endhighlight %}    
   
 Such code in functional languages are optimized and doesn’t need extra stack space.  
 This enables recursion to be a natural fit for functional paradigm.  
@@ -64,10 +66,10 @@ Have you tried writing a quick sort in iterative fashion? Now try the same with 
 
 **Array vs List**  
 
- ```
- What’s the basic data structure C++ or Java provide? If you think carefully Array is the only data structure(and classes/struct) that has a native support in these languages. Everything else you have to write(or use the standard libraries that comes along with it).
- ```  
-  
+What’s the basic data structure C++ or Java provide? 
+
+ > If you think carefully Array is the only data structure(and classes/struct) that has a native support in these languages. Everything else you have to write(or use the standard libraries that comes along with it).   
+
 Array comes with a trivial but very important feature of random access.  
   
 How do you traverse an array?  
@@ -93,13 +95,13 @@ If you see a linked list as recursive structure you can apply some of the recurs
 Sum of all numbers or multiplication or similar problems where we accumulate the data after iterating through each element and apply some function(like multiplication or square etc) is a very common task. All the functional languages provide kind of abstraction for these kind of operations called Reduce or Fold.  
   
 Sum of all numbers of an array in Javascript:  
-```
+{% highlight javascript %}
 var sum = [1, 2, 3].reduce(add, 0);
 function add(a, b) {
 return a + b;
 }
 console.log(sum); // 6
-```
+{% endhighlight %} 
 
 **What about other common operations in array/list?**  
   

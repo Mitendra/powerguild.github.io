@@ -83,7 +83,7 @@ The way the request forwarding works is:
 [scaling_selenium/nginx.conf](https://github.com/Mitendra/code_samples/blob/master/scaling_selenium/nginx.conf)  
   
 
-```
+{% highlight shell %}
 worker_processes auto;
 worker_rlimit_nofile 1024;
 error_log logs/error.log debug;
@@ -185,7 +185,7 @@ http {
 		}	
 	}
 }
-```  
+{% endhighlight %}  
   
 
 ### Taking a step further  
