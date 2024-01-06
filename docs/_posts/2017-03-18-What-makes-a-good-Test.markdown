@@ -43,7 +43,8 @@ i. Order of test cases: many times we try to make sure test cases which can impa
 ii. Every test case having its own setup and Tear down: this makes sure all test cases start on a clean slate.  
   
 Option ii) seems quite reasonable but is often very difficult to maintain for several reasons:
-a. It’s resource and time intensive: to do the whole setup like creating an account, adding funding instruments etc add much more overhead for the test.  
+a. It’s resource and time intensive: to do the whole setup like creating an account, adding funding instruments etc add much more overhead for the test.    
+  
 b. Knowing the whole system is difficult: while some well known stuffs could be very well isolated but the challenge is to know all such status change in a large application with hundreds of subsystem is not easy. E.g. Even though it seems creating separate account is good enough step for test isolation. We don’t really know if many similar account would or wouldn’t create a skewness in test data. Production systems are typically written for practice use cases but in test environments data may be a bit biased. E.g. In practice if you take the birthdays of all the account holders, there will be very well distributed in a very wide range. But in test environment you may be creating accounts with only few birth dates or in many case having the same birth date. This skews the data. So if you try to load the data using such skewed key the load performance will get worse over the time as you run many re and more tests, resulting into non deterministic behavior of test. Running the same test at two different times may result into different result.  
   
 3. External system affecting the tests    
