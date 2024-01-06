@@ -74,9 +74,12 @@ Requirements for the proxy:
 We can use Redis to store service and hosts mapping. For each request for a specific service our Lua code can get the upstream details from Redis and forwards the request in round robin fashion.
   
 sample redis entry:
+
+{% highlight shell %}
 > Redis Key: service_discovery  
 > Sub key: 9001  
 > value: server1, server2  
+{% endhighlight %}
     
 **Fault injection**  
   
@@ -84,10 +87,12 @@ Basic approach: in test setup step generate a request-id and store the required 
   
 The format could look like:
   
+{% highlight shell %}
 > Redis Key: faultinjection  
 > Sub key: request_f7a7bb674caec  
-> “{\”markdown\”:{\”uri\”:[\”users\”]},\”delay\”:{\”books\”:\”10\”}}”;  
-  
+> value: “{\”markdown\”:{\”uri\”:[\”users\”]},\”delay\”:{\”books\”:\”10\”}}”;  
+{% endhighlight %}
+
 1. Downstream failure: we can have instructions saying markdown, which will effectively cause a 500 when the flow is trying to hit the particular service.  
 2. Delayed response: we can have instructions like delayed which will delay the response by the given amount of time in seconds.  
 3. Mock/failed response: we can also populate the info with mock fake response from the service. For scenario where it’s difficult to replicate a failure in downstream system, this is useful for predicable result.  
@@ -98,7 +103,7 @@ The format could look like:
   
 [load_balancing.lua](https://gist.github.com/Mitendra/b2eeebaac135ee1179949e66f703818b#file-load_balancing-lua) 
   
-```
+{% highlight lua %}
 
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = "6379"
@@ -129,13 +134,13 @@ else
     ngx.log(ngx.ERR, "selected host is: " .. ngx.var.target)
   end
  end
-```
+{% endhighlight %}
   
 **Fault injection:**
   
 [fault_injection_using_lua.lua](https://gist.github.com/Mitendra/cacdece74c78a1dd4fa208bfd4967845#file-fault_injection_using_lua-lua)
   
-```
+{% highlight lua %}
 function has_value (tab, val)
   for index, value in ipairs (tab) do
     if value == val then
@@ -188,6 +193,6 @@ if(req_id and ok) then
     end
   end
 end
-```
+{% endhighlight %}
 
 [Githublink](https://github.com/Mitendra/fault_injection_proxy)

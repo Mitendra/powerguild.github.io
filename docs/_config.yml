@@ -33,6 +33,8 @@ plugins:
   - jekyll-feed
 # Google Analytics
 google_analytics: G-PSRENC9XX2
+markdown: kramdown
+highlighter: rouge
 # show_excerpts: true
 # Exclude from processing.
 # The following items will not be processed, by default.
