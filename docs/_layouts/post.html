@@ -26,5 +26,11 @@ layout: default
     {%- include disqus_comments.html -%}
   {%- endif -%}
 
+ 
+  {%- if site.comments.giscus.enabled -%}
+    {% include giscus_coments.html %}
+  {%- endif -%}
+
+
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
