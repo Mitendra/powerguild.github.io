@@ -35,6 +35,9 @@ plugins:
 google_analytics: G-PSRENC9XX2
 markdown: kramdown
 highlighter: rouge
+comments:
+  giscus:
+    enabled: true
 # show_excerpts: true
 # Exclude from processing.
 # The following items will not be processed, by default.
