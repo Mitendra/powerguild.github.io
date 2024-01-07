@@ -20,17 +20,21 @@ You share the details with your friends, many of them like it and start using it
 **Curiosity to know how it’s doing and the analytics**  
   
 You know the database details, so you do few queries to find how many people used it what kind of stuff people are interested in. But, querying it every time is hard. So you start putting together an analytics page where you can get these detail easily.
-Growth in user base and one off errors
+
+**Growth in user base and one off errors**  
+  
 The app becomes popular. More traffic is coming in. Many of your friends complains that they see few errors randomly.You realized you haven’t added much logging and there is no easy way to find what issues they are facing.  
   
-**Logging and debuuging**  
+**Logging and debugging**  
   
 You put together a basic logging strategy. You write most of the logs to file and in certain scenarios to database itself to collect information later.  
   
 **Monitoring and alerting**  
   
-You have logged enough and are waiting for next set of failures. The error doesn’t surface for few hours. You keep on looking at logs periodically, but it simply refuses to come back. So, now you write another script which will keep monitoring the log and send an email if any issue occurs. After few hours, you get the first alert. There is enough details to fix the corner case and in next few hours the needed code is rolled out. You are about to tell your friend that you have fixed the issue, but you got a pleasant surprise. The friend himself is calling you. It seems either he himself figured out or this is what probably is called telepathy. With the excitement you pick up the call, but it seems there is more bad news.The friend tells you that earlier only few things were randomly failing but now nothing works and the server seems to be down.
-Availavility issues and planning for high availablity
+You have logged enough and are waiting for next set of failures. The error doesn’t surface for few hours. You keep on looking at logs periodically, but it simply refuses to come back. So, now you write another script which will keep monitoring the log and send an email if any issue occurs. After few hours, you get the first alert. There is enough details to fix the corner case and in next few hours the needed code is rolled out. You are about to tell your friend that you have fixed the issue, but you got a pleasant surprise. The friend himself is calling you. It seems either he himself figured out or this is what probably is called telepathy. With the excitement you pick up the call, but it seems there is more bad news.The friend tells you that earlier only few things were randomly failing but now nothing works and the server seems to be down.  
+
+**Availavility issues and planning for high availablity**  
+  
 It seems while you were trying to roll out the code, the server went down. It sounds so stupid, but you just did it. You want to quickly get out of this mess. You decide to have a basic redundancy in place before adding any new feature.  
   
 **Load balancing and deployment strategy**  
