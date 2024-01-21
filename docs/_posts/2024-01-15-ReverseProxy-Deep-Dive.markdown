@@ -5,159 +5,189 @@ date:   2024-01-15 08:43:56 -0800
 categories: ReverseProxy
 
 ---  
-## A deep dive of a reverse proxy
+## A Deep Dive into Reverse Proxy
 
-Reverse proxy is a critical piece of software very commonly seen in different set up in a distributed system.
-You might have seen this as a proxy enabling service mesh, as a loadbalancer helping distribute the load among different database instances or  as an edge proxy hiding all the complexity behind a site.
+A reverse proxy is a critical piece of software commonly found in various setups within a distributed system. You may have encountered it as a proxy enabling service mesh, a load balancer distributing the load among different database instances, or an edge proxy hiding the complexity behind a site.
   
 ![](/assets/images/reverse_proxy.png)  
   
 
-Multiple great reverse proxy exists like HAProxy, Nginx, Envoy, caddy, traeffic, zuul, Apache Traffic Server etc. they have their own strength and weaknesses and often used in specific contexts. e.g. for service mesh Envoy/linkerd are used very often. For edge proxy Nginx/HAProxy are used. for caching proxy ATS is great. Load balancing among different database load again HAProxy is a great choice.
+Several excellent reverse proxies exist, such as HAProxy, Nginx, Envoy, Caddy, Traefik, Zuul, Apache Traffic Server, etc. Each has its strengths and weaknesses, often used in specific contexts. For service mesh, Envoy/Linkerd are common choices, while for edge proxy, Nginx/HAProxy are preferred. For caching proxy, ATS is a great option, and HAProxy shines in load balancing among different database instances.
 
 ## Unveiling the Functions and Intricacies of Reverse Proxies
 
 At its core, the reverse proxy facilitates communication between clients and origin hosts. The high-level workflow involves:
 
 1. Clients connecting to the reverse proxy
-2. client sending requests (http/tcp/udp/ssh etc)
-3. the proxy forwarding the request to one of the origin hosts 
-4. proxy awaiting the respons from the origin
-5. proxy forwarding the response to the client 
-6. proxy/client/origin closing the connections.
-   
-Note: For simplicity we'll focus on Layer 7 (http) reverse proxy.
-  
+2. Client sending requests (HTTP/TCP/UDP/SSH, etc.)
+3. The proxy forwarding the request to one of the origin hosts
+4. Proxy awaiting the response from the origin
+5. Proxy forwarding the response to the client
+6. Proxy/client/origin closing the connections.  
+     
+Note: For simplicity, we'll focus on Layer 7 (HTTP) reverse proxy.
+
 Breaking down the workflow reveals several essential functionalities:
-1. Connection management: 
-     listening to port, accepting a connection, accepting http requests 
-2. http request parsing/header manipulation: 
-     parsinng http request, sanitizing the request (to make sure it’s a valid request), manipulating headers, rewriting Paths etc
-3. Service discovery/downstream discovery:
-     Idntifying set of valid hosts for handling the requests, identifying one of the host as a target host for the specific requests.
-4. Function as a http client:
-    Initiatiing connection to origins hosts and sending requests/accepting response from the origin
-5.  Observability:
-    Enhancing visibility into proxy operations 
+1. Connection Management:
+    * Listening to ports
+    * Accepting connections
+    * Accepting HTTP requests
+2. HTTP Request Parsing/Header Manipulation:
+    * Parsing HTTP requests
+    * Sanitizing requests
+    * Manipulating headers
+    * Rewriting paths, etc.
+3. Service Discovery/Downstream Discovery:
+    * Identifying valid hosts for handling requests
+    * Identifying one host as the target for specific requests
+4. Functioning as an HTTP Client:
+    * Initiating connections to origin hosts
+    * Sending to the origins
+    * Accepting responses from the origin
+5. Observability:
+    * Visualizing activities at the proxy tier to understand what's going on.
+    
 
-Each of these steps are complicated and we can go a level deeper in each of these steps.
+Each of these steps is complex, and a deeper dive into each is warranted.
 
-## Deep dive into Connection management:
+# Deep Dive into Connection Management
 
-On a very high level the proxy need to bind to a specifci port, and listens on it. It needs to wait for some data, read/process the data it recieves, and forward the data to the origin, and once it receives the data from origin, write it back to the connection, so that clients can read the response. It continue this in the loop.
+On a high level, the proxy needs to bind to a specific port, listen on it, wait for data, read/process received data, forward data to the origin, receive data from the origin, and write it back to the connection for clients to read the response. This process continues in a loop.
 
-All standard programing languges provide netwrok libraries which can help write a simple server very easily. One sample go tcp server example:
+Standard programming languages provide network libraries for writing a simple server with a workflow like:
 
-``` golang
-package main
+```
+1. Create a TCP socket
+2. Bind to a specific port
+3. Listen on the port/wait for connection request
+4. Accept the connection and be ready for data transfer
+5. Read/process incoming data
+6. Repeat step 5 until the connection needs to be closed based on some application logic
+7. Close the connection
 
-import (
-    "fmt"
-    "net"
-)
-
-func main() {
-    // Listen for incoming connections
-    listener, err := net.Listen("tcp", "localhost:8080")
-    if err != nil {
-        fmt.Println("Error:", err)
-        return
-    }
-    defer listener.Close()
-
-    fmt.Println("Server is listening on port 8080")
-
-    for {
-        // Accept incoming connections
-        conn, err := listener.Accept()
-        if err != nil {
-            fmt.Println("Error:", err)
-            continue
-        }
-
-        // Handle client connection in a goroutine
-        go handleClient(conn)
-    }
-}
-
-func handleClient(conn net.Conn) {
-    defer conn.Close()
-
-    // Read and process data from the client
-    // ...
-
-    // Write data back to the client
-    // ...
-}
 ```  
-[source](https://okanexe.medium.com/the-complete-guide-to-tcp-ip-connections-in-golang-1216dae27b5a)
 
-## what makes it complex
+## What Makes It Complex
 
-For one client, the above code or similar code works well. If we have 10 clients, we need to start thinking about how not to block these clients and consider concurrency. Maybe one thread for each client would make it work. Scaling it to 1000, most likely, a 1:1 threading may not be a great idea. Perhaps lightweight threads like goroutine would work great here, or some event loop-based mechanisms would be a nice way. What about 10k or 100k clients? Maybe select/ is not an option here, and we need to look for epoll/kqueue. 
+### Concurrency
 
-Also, if there is only 1 thread listening to all connections, how would we leverage multiple cores? Maybe 1 main thread to listen to the activity and distribute the work to different threads and collect the data back and send it to the client. Will it require locks? Will it scale if we have 8 cores? What about 64 cores? And what about 128 cores?
-Can kernel help? Cane we leverage Kernel level load balancing using so_resuseport
+By default, socket/network I/O is blocking. The mentioned code works well for one client, but with multiple clients, handling concurrency becomes crucial. One way is to use one thread for each client connection. However, beyond a few hundred clients, the cost of creating threads and getting blocked becomes inefficient. 
 
-**Challenge**  
-1. Concurrency: as we increase the conncurency, we need optimal way to handle inbound connections. In late 90s/early 2000s this led to a term called [C10K Problem](https://en.wikipedia.org/wiki/C10k_problem). This led to an interesting paradigm of [event driven programming](https://en.wikipedia.org/wiki/Event-driven_programming). [NodeJs event loop](https://www.builder.io/blog/visual-guide-to-nodejs-event-loop) is great example. Other examples are [Java Netty](https://livebook.manning.com/book/netty-in-action/chapter-1/), [C libevent](https://libevent.org).  
+#### Non blocing IO and I/O multiplexing
+
+Non-blocking I/O emerged as a solution. The idea here is that if an I/O is not ready for read/write, instead of blocking the thread, it can simply respond with error/notification. In linux, passing an extra parameter O_NONBLOCK will put the file decriptor in nonblocking mode.
+https://linux.die.net/man/7/socket
+```
+It is possible to do nonblocking I/O on sockets by setting the O_NONBLOCK flag on a socket file descriptor using fcntl(2). 
+Then all operations that would block will (usually) return with EAGAIN (operation should be retried later); connect(2) will return EINPROGRESS error.
+```
+
+This led to approaches like polling. A thread periodically polls the network socket/I/O to check if it's ready/has data to process. If not, then it sleeps for some time and repeats the process. This way, busy wait was reduced, and threads/processes could scale up to a few hundred concurrent requests. 
+
+A possible optimization is to create multiple processes, and each process handles a few threads.  
   
-2. Leveraging multiple core: while event loops are great, they often are single threaded. With the [demise of Moore's law](https://cap.csail.mit.edu/death-moores-law-what-it-means-and-what-might-fill-gap-going-forward), we are in a phase where thenumber of cores are doubling every few years and 64+ cores are very common. So to truely levearge the power we need to make sure the event loops work for multiple cores as well. different proxies leverage different strategies for handling this. NGINx uses a multiple process stratgey, Envoy levarges kernal load balancing features so_reuseport for doing the load balancing at kernal level, HAProxy used to use multi process model but have since moved to multi threading model. each one of them have it's own challenges. e.g. Envoy enjoys the benefit of being simpler to handle the multiple cores by leveraging kernal load balancing but it significantly impacts its load balancing and connection management on the origin side.
+[Apache http server](https://httpd.apache.org/docs/2.4/mod/mpmt_os2.html) is one example where they use this hybrid model. Again, this works for a few thousand clients but doesn't scale beyond that. Periodically checking hundreds/thousands of connections/file descriptors (fd) for I/O readiness is still quite costly.
+
+To optimize further, what if instead of clients checking for each of these fds independently, if there is some way for clients to list all fds they are interested in and be notified when they/some are ready.
+
+#### I/O multiplexing: Select, Poll and epoll
+
+Linux provides a few system calls for the same purpose: select and poll. With select, we can provide a list of fds and three arrays of bitmasks corresponding to read/write/error readiness, respectively. This allows us to monitor multiple fds simultaneously.
+
+Poll is similar but slightly more efficient and uses a single array for watching events instead of three separate arrays.
+
+[reference] (https://devarea.com/linux-io-multiplexing-select-vs-poll-vs-epoll/)
+
+With select/poll, we can handle a few hundred/thousand connections, but at a higher scale, this is also not sufficient.
+
+A further optimization to this approach is the epoll system call. Instead of linearly going through each of the fds (think in tens of thousands of them) to identify which one is ready, we get a list of fds that are ready.
+
+[performance: select & poll vs epoll](https://jvns.ca/blog/2017/06/03/async-io-on-linux--select--poll--and-epoll/)
+```
+# operations  |  poll  |  select   | epoll
+10            |   0.61 |    0.73   | 0.41
+100           |   2.9  |    3.0    | 0.42
+1000          |  35    |   35      | 0.53
+10000         | 990    |  930      | 0.66
+```
+
+#### C10K and the event driven architecture
+n the late '90s, the difficulty of handling a very large number of concurrent clients dominated networking discussions and led to the term called the [C10k problem](https://en.wikipedia.org/wiki/C10k_problem), where the goal was to handle 10k concurrent connections from the same host.
+
+This resulted in another architectural paradigm called [event driven programming](https://en.wikipedia.org/wiki/Event-driven_programming).
+
+The concept revolves around employing a single event loop, rather than generating a thread/process for each connection. This central event loop actively monitors I/O-ready file descriptors (fds) and signals specific worker threads to handle the actual requests. The core event loop is designed to be lightweight, focusing solely on overseeing the I/O readiness and informing the dedicated worker thread to process the respective requests. Consequently, this design allows the software to scale autonomously, regardless of the number of connections.
+
+[NodeJs event loop](https://www.builder.io/blog/visual-guide-to-nodejs-event-loop) is a great example. Other examples are [Java Netty](https://livebook.manning.com/book/netty-in-action/chapter-1/), [C libevent](https://libevent.org).  
+
+**[Solutions to the C10k Problem](https://webhostinggeeks.com/blog/c10k-problem-understanding-and-overcoming-the-10000-concurrent-connections-challenge/)**
+```
+1. Event-Driven Programming
+2. Multiplexing I/O Operations
+3. Thread Pooling
+4. Networking and OS Optimizations
+```
+
+Event-driven architecture worked very well for a long time, but it has its own limitations. One of the biggest limitations is that it's single-threaded. So, if there is a blocking operation, it will block the entire event loop. This poses a significant problem for long-running operations such as TLS handshake. Consequently, this issue led to the development of multi-threaded event loops.
 
 
-Next level challenge comes if we also want to do say tls, so it not only need to finish the tcp connection we also need to handle tls handshake and all the complexity involve? Which tos library to use OpenSSL or libessl or boringssl? It has its own complexity and none of these are drop in replacement of each other so it adds some complexity. One way to simplify is just stick to one library but the challenge is we’ll also be bound by its limitations. Link to the challenges
-What if we need to support different tls levels?
+### Multiple cores
 
-Another big challenge is what if we also need to support, udp, uds etc?  
+With the [demise of Moore's law](https://cap.csail.mit.edu/death-moores-law-what-it-means-and-what-might-fill-gap-going-forward) multiple cores have become the norm, and it's very common to have a large number, such as 32, 64, or even larger numbers of cores.
 
-How to handle timeouts?
-How to handle abuser?
+Different proxies use different strategies to address this. HAProxy (version below 1.8) used to have multiple processes to handle this scenario, and the same applied to NGINX, which uses a multi-process model.
 
-Http parsing
-Once a tcp connection is established, next step is to actually send data over that connection and we’ll be talking about http protocol only. Over the years http protocol itself has evolved and  there a great article on Mozilla doc about the evolution. Let pick http 1.1 for simplicity. Http is text based protocol and -\r\n is used for delimiting different parts
+While this works well and performs much better than the single-threaded event loop, it does create a lot of overhead to deal with multiple processes, especially around config management, log aggregation, load balancing efficiency, and connection management.
 
-A simple http get request would look like 
+#### Socket Sharding
+[Socket sharding](https://lwn.net/Articles/542629/) is another interesting feature used by proxies to leverage os's load balancing feature.
 
-And a post request like.
+```
+SO_REUSEPORT can be used with both TCP and UDP sockets. With TCP sockets, it allows multiple listening sockets—normally each in a different thread—to be bound to the same port. Each thread can then accept incoming connections on the port by calling accept(). This presents an alternative to the traditional approaches used by multithreaded servers that accept incoming connections on a single socket.  
+```  
 
-So to accept a valid http request, a proxy needs to read the data from listening port, parse it and understand the request. If the request is valid forwarded the requests to the origin servers. Request could also be invalid and may be an attempt to exploit some issues/bugs (http smuggling/ddos) etc.
-A get request typically ends with 2 \r\n, so one of the way to look at this is read data till you \r\n and that determines your request. Post request is a bit more complicated and it also has a payload. The size of the payload is determined by content-length. Payload can also have \r\n. So the previous strategy for looking for new lines won’t work.
-So the revised strategy could be.
-1. read one line, see if the request is get or post
-2. If it’s get keep reading all the lines till you see 2 lines
-3. If it’s post, from the read data identify the content-length by looking for content-length and then read those many bytes from port.
+Envoy uses this feature to bind each listener thread to the same port and effectively utilizes the kernel-provided load balancing to distribute the load among multiple threads.
+
+So, on the listening side, it is able to scale very well. However, this suffers from load balancing/connection management issues. Envoy prefers to perform end-to-end request processing in the same thread, and each thread is unaware of how other threads are processing the requests. So, if you have a lot of cores and a lot of origins (upstream in Envoy's terms), [the load balancing could be very skewed](https://www.envoyproxy.io/docs/envoy/latest/faq/load_balancing/concurrency_lb), and you may end up with more connections to the origin.
+
+This is not a big problem for a sidecar where you typically allocate only a few cores to the sidecar
+
+[Nginx > 1.9.1](https://www.nginx.com/blog/socket-sharding-nginx-release-1-9-1/) support this socket sharding as well.
+
+HAProxy (>= 1.8) enabled multi threading as well but took slightly different approach
+
+[HAProxy multi threading support](https://www.haproxy.com/blog/multithreading-in-haproxy#advanced-multithreading-architecture)
+```
+ Instead of having one thread for the scheduler and a number of threads for the workers, we have decided to run a scheduler in every thread. This has allowed the proven, high-performance, event-driven engine component of HAProxy to run per thread and to remain essentially unchanged. Additionally, in this way, the multithreading behavior was made very similar to the multiprocess one as far as usage is concerned, but it comes without the multiprocess limitations!
+```
+
+While some of these optimizatin are good for handling cores upto 64, beyond that it becomes further complicated.
+HAproxy intriduced this concept of thread group to scale it upto 4096 cores
+
+[overcoming 64 core barries](https://www.haproxy.com/blog/announcing-haproxy-2-7#overcoming-the-64-threads-barrier)
+
+```
+A thread group, which you create with the thread-group directive in the global section of your configuration, lets you assign a range of threads, for example 1-64, to a group and then use that group on a bind line in your configuration. You can define up to 64 groups of 64 threads.
+
+In addition to taking better advantage of available threads, thread groups help to limit the number of threads that compete to handle incoming connections, thereby reducing contention.
+```
+
+### Furthe challenges in connection managment
+   
+Things become further complicated when we want to support TLS. So, we not only need to finish the TCP connection, but we also need to handle the TLS handshake and all the complexity involved. This brings several questions, like which TLS library to use: OpenSSL, libessl, or BoringSSL. None of these is a drop-in replacement for each other, adding some complexity. One way to simplify is just to stick to one library, but the challenge is we'll also be bound by its limitations. [Link to the challenges]
+
+What if we need to support different TLS levels like tls 1.1, 1.2 or 1.3?
+
+Another significant challenge is what if we also need to support different protocols like UDP?
+
+What about triggering timeouts and dealing with abusive clients?
 
 
-What if there are more than 1 content-length and with different values?
-There are some special headers that proxy use for some special behavior so proxy needs to parse it as well. Proxy also modifies a few  headers. So it’s important to parse it efficiently and store it for further processing. Proxies may provide some dsl to add/remove/update some headers. So they need an optimized way to read as well write it. One way to do it could be to translate this into a hash map of key values.  While this is a good idea for simple requests with a few header and probably at a lower request rate. This may not be a good idea at a very high request rate rate.
-1. it significantly increased the memory: all requests need to be stored in memory twice (one as we read and one in the hash)
-2. In practice we may be getting a lot of headers but only refer to a few during processing, so it’ll be a lot of wasted cpu to create hash 
-3. There is no good defined format of how big the header could be, which can make it a very easy dos attack vector.
-
-So efficient parsing and easy access to read/write very quickly becomes a complex problem. Normally all proxies store it in an optimized way. Haproxy stores it in xyz format, ats also has custom ds, envoy as well.
-
-These are optimized for general cases and may not be a great fit for all scenarios. Further customization may be required on top of it.
-
-Cookie is another
-HTTP has evolved over time.
-On a very high level we have header, data, trailer
-
-In http/1, 1.1 it’s text based.
-So we need to look at the run coming data look for new lines,  parse, find the end of the request and store the info.
-
-There are bad requests, so we need to some santization
-Spec has complexity. Http 1.0 didn’t support reuse of connections. To optimize there a few headers keep-alive and connection:close were used. This brought many issues. You can read about these here. Http 1.1 was stable and was the longest serving http. Version. But it evolved to http 2.  And finally http 3. While fundamentally they still follow the similar semantics. Things became a little more complex/easier.  Looking for new line was not very efficient, so I. H2, they came with the concept of frames, so there was standard way to know the start/end of record. But it became much more complicated because of multiplexing support. With multiple streams came the complexity of quack. The complexity of server push became so complex that and so buggy that finallly chrome decided to get rid of that feature completely.
+  
+This post is already too long, rest of the complexitiy related to reverse proxy (http parsing, service discovery/load balacing, http client and observability) will be discussed in the subsequent posts.
 
 
-Header manipulation and path rewrite:
-One of the most frequent work at the reverse proxy is to sanitize the headers. All untrusted headers are stripped of, a few more headers are added. And very often the urls/schemes are modified.
 
-The goal
-Here is to provide easy but flexible way to provide updates still being efficient.
-
-Haproxy provides a very powerful header rewrite suntaxes.
-One of catch here is spec compliance.
-I’m http1 headers are case insensitive, but frequently servers don’t comply or the application server simply use some specific casing. In http2, default the headers are lowercase. Different proxies handle it differently. Envoy will by default downcase the headers and provide a way to keep the case. Haproxy also provide ways to keep the case as you need.
 
 
 
