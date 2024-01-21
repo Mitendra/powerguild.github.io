@@ -174,17 +174,22 @@ In addition to taking better advantage of available threads, thread groups help 
 
 ### Furthe challenges in connection managment
    
-Things become further complicated when we want to support TLS. So, we not only need to finish the TCP connection, but we also need to handle the TLS handshake and all the complexity involved. This brings several questions, like which TLS library to use: OpenSSL, libessl, or BoringSSL. None of these is a drop-in replacement for each other, adding some complexity. One way to simplify is just to stick to one library, but the challenge is we'll also be bound by its limitations. [Link to the challenges]
+Things become further complicated when we want to support TLS. So, we not only need to establish the TCP connection, but we also need to handle the TLS handshake and all the complexity involved. This raises several questions, such as which TLS library to use: OpenSSL, libessl, or BoringSSL. None of these is a drop-in replacement for the others, adding some complexity. One way to simplify is just to stick to one library, but the challenge is that we'll also be bound by its limitations. e.g. from [Boring ssl's home page](https://boringssl.googlesource.com/boringssl/)  
+```
+Although BoringSSL is an open source project, it is not intended for general use, as OpenSSL is. We don't recommend that third parties depend upon it. Doing so is likely to be frustrating because there are no guarantees of API or ABI stability.
+```
+[libressl good and bad](https://insanecoding.blogspot.com/2014/04/libressl-good-and-bad.html)
 
-What if we need to support different TLS levels like tls 1.1, 1.2 or 1.3?
+
+What if we need to support different TLS levels like TLS 1.1, 1.2, or 1.3?
 
 Another significant challenge is what if we also need to support different protocols like UDP?
 
-What about triggering timeouts and dealing with abusive clients?
+How about triggering timeouts and dealing with abusive clients?
 
 
   
-This post is already too long, rest of the complexitiy related to reverse proxy (http parsing, service discovery/load balacing, http client and observability) will be discussed in the subsequent posts.
+**This post is already too long; the rest of the complexity related to the reverse proxy (HTTP parsing, service discovery/load balancing, HTTP client, and observability) will be discussed in subsequent posts.**
 
 
 
