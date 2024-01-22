@@ -190,7 +190,7 @@ to limit the number of threads that compete to handle incoming connections,
 thereby reducing contention.
 ```
 
-### Furthe challenges in connection managment
+### Further challenges in connection managment
    
 Things become further complicated when we want to support TLS. So, we not only need to establish the TCP connection, but we also need to handle the TLS handshake and all the complexity involved. This raises several questions, such as which TLS library to use: OpenSSL, libessl, or BoringSSL. None of these is a drop-in replacement for the others, adding some complexity. One way to simplify is just to stick to one library, but the challenge is that we'll also be bound by its limitations. e.g. from [Boring ssl's home page](https://boringssl.googlesource.com/boringssl/)  
 ```
@@ -209,7 +209,8 @@ Another significant challenge is what if we also need to support different proto
 
 How about triggering timeouts and dealing with abusive clients?
 
-
+### Conclusion
+While connection management is very basic and fundamental, making it work at a very large scale is quite challenging and requires specialized handling. Each of the popular proxies has employed multiple techniques to scale it for their use cases, and each has its own pros and cons. Make sure you understand it well before choosing one over the other.
   
 **This post is already too long; the rest of the complexity related to the reverse proxy (HTTP parsing, service discovery/load balancing, HTTP client, and observability) will be discussed in subsequent posts.**
 
