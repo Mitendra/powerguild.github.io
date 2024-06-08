@@ -187,15 +187,15 @@ end
 6. To make it easier for the client, the protocol supports opaque data, which the server returns as is in the response. This allows the client to match the response to the correct request.
 
 ## HAProxy Integration Highlights
-1. mTLS support is not enabled in HAProxy Lua TCP socket: a hack to enable it is available, but a better fix is needed.
+1. mTLS support is not enabled in HAProxy Lua TCP socket. A hack to enable it is available [here](https://github.com/Mitendra/haproxy-lua-couchbase?tab=readme-ov-file#haproxy-lua-socket-patch-for-mtls), but a better fix is needed.
 2. DNS support is not enabled in Lua. HttpClient has DNS resolution options, but they don’t apply to TCP sockets. The do-resolve action is present, but interaction between Lua and HTTP actions is not documented. Attempts to use it did not work.
 3. Since DNS can happen over TCP, we can build a simple, limited-scope DNS solution to handle specific use cases.
 4. TCP calls can only happen in the same thread, so we need to use Lua-per-thread for this kind of interaction.
 5. For pipelining:
-  a. We need a way to send requests from different ongoing transactions into a queue. HAProxy Lua supports a queue which can be used here.
-  b. Pause the ongoing transactions. Lua has an option to yield/sleep without blocking the event loop.
-  c. Read from the queue and connect to CB. This needs to be built.
-  d. Read the response and share it with the paused transactions. We are not aware of a way to enable the transaction when some other action is triggered in Lua (other than IO). A workaround is to periodically wake up, try to read the data from the shared source, and if not found, pause again.
+    a. We need a way to send requests from different ongoing transactions into a queue. HAProxy Lua supports a queue which can be used here.
+    b. Pause the ongoing transactions. Lua has an option to yield/sleep without blocking the event loop.
+    c. Read from the queue and connect to CB. This needs to be built.
+    d. Read the response and share it with the paused transactions. We are not aware of a way to enable the transaction when some other action is triggered in Lua (other than IO). A workaround is to periodically wake up, try to read the data from the shared source, and if not found, pause again.
 6. TCP timeouts: core.tcp only supports overall timeouts and doesn’t have individual read/write/idle timeouts. If we set the timeout very high, a connection error takes a very long time; if we set it low, the TCP connection gets closed frequently and new connections need to be opened periodically.
 
 ## Testing
@@ -205,10 +205,10 @@ end
 4. DNS resolution is an important step, and actual CB data will contain hostnames. To make it easier, we can use dnsmasq to point to localhost. This enables end-to-end testing without depending on the actual server.
 
 ## Load Testing
-1. While basic testing can be done against the actual CB server, load testing or high-volume tests are not advisable.
-2. Since we already understand the basics of the CB Memcached protocol, we can use it to build a test CB server as well.
+1. While basic testing can be done against the actual CB server, doing load testing against a production or staging CB server may impact other users. 
+2. Since we already understand the basics of the CB Memcached protocol, we can use it to build a mock test CB server as well.
 3. For testing, we can ignore the mTLS part.
-4. For high-volume tests, we’ll need multiple connections to be open to the server. A simple native lua cb server wont work here. 
+4. For high-volume tests, we’ll need multiple connections to be open to the server. A simple native lua cb server wont work here if it's single threaded. 
 5. We can leverage HAProxy itself to provide multithreaded eventloop and use it as a CB server to test end-to-end behavior locally.
 
 # Conclusion
