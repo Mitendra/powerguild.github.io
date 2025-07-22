@@ -101,7 +101,10 @@ Even with established standards and defined behaviors, there are always bad acto
 
 **Examples include:**
 * Carefully crafted requests with conflicting Content-Length and Transfer-Encoding headers that can lead to [HTTP request smuggling](https://medium.com/r?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHTTP_request_smuggling).
-* Invalid http version like 0.5 causes some servers to crash
+* Invalid http version like 0.5 causes some servers to misbehave
+* Well crafted user agent can lead to [denial of service](https://blog.getambassador.io/denial-of-service-vulnerabilities-in-envoy-proxy-267c60ffc0a)
+
+
 
 ## Request Sanitization
 
@@ -118,10 +121,16 @@ Reject requests that exceed acceptable limits for URL length, headers, or cookie
 
 **Access Control:**
 Block access to restricted endpoints such as /admin, /healthcheck, or any routes intended only for internal or localhost use.
-Many times the server expects these requests only from a certain ip ranges. e.g. if you have put your static assets in some of CDNs, you may expect the CDN to hit your server occasionaly to load the assets. These endpoints should be only accesible for the cdn and not be accessibe by other.
+In many cases, servers are configured to only accept requests from specific IP ranges. For example, if your static assets are hosted on a CDN, your origin server might expect occasional requests from the CDN’s IPs to refresh or preload content.
+
+These endpoints should be accessible only by the CDN, and any requests from outside those trusted IP ranges should be blocked. This helps prevent abuse and ensures that internal or privileged endpoints are not exposed to the public internet.
+
+Proxies can enforce these IP range checks early, adding a layer of security before the request reaches the application.
 
 
-Similarly outbound responses from proxy also need to be sanitized. For example, the proxy often acts as a central enforcement point for GDPR compliance by ensuring only approved cookies are included in the response. It also plays a key role in setting appropriate security headers like Content-Security-Policy to protect clients from common web threats.
+## Response Sanitization
+
+Similarly outbound responses from proxy also need to be sanitized. For example, the proxy often acts as a central enforcement point for GDPR compliance by ensuring only approved cookies are included in the response. It also plays a key role in setting appropriate security headers like [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to protect clients from common web threats.
 
 ## Header Manipulation
 Reverse proxies often need to add/remove/update headers:
@@ -136,11 +145,10 @@ Adding or removing headers requires the proxy to modify the incoming data stream
 
 However, this introduces constraints on memory usage, limits on the maximum header size the proxy can handle, and other performance-related optimizations. One common optimization is to convert all header keys to lowercase to simplify lookups and configuration. While HTTP header names are case-insensitive per the spec, this normalization can occasionally cause issues with non-compliant clients or servers.
 
-The `User-Agent` Header
+The `User-Agent` header is one of the most commonly used HTTP headers to identify the client making the request. It's especially useful for detecting whether the client is a browser, mobile device, tablet (like an iPad), or other platform—allowing applications to adjust rendering or behavior accordingly. This is also useful for detecting whether a web crawler is accessing the site.
 
-The `User-Agent` header is one of the most commonly used HTTP headers to identify the client making the request. It's especially useful for detecting whether the client is a browser, mobile device, tablet (like an iPad), or other platform—allowing applications to adjust rendering or behavior accordingly.
 
-#### Examples
+**Examples**
 
 - **iPhone User-Agent:**
 ```
@@ -152,11 +160,24 @@ Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHT
 Mozilla/5.0 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
 ```
 
-Over time, `User-Agent` strings have become bloated and inconsistent due to historical quirks and compatibility hacks. As a result, parsing them reliably often requires complex regular expressions.
+- **Google crawler User-Agent:**
+```
+Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+```
+
+Over time, `User-Agent` strings have become bloated and inconsistent due to [historical quirks](https://webaim.org/blog/user-agent-string-history/) and compatibility hacks. As a result, parsing them reliably often requires complex regular expressions.
 
 However, this opens up a potential vulnerability: a maliciously crafted `User-Agent` string can cause regex engines to backtrack excessively, leading to denial-of-service (DoS) conditions such as stack overflows or system crashes.
 
+Geo-IP is a technique used to map the incoming IP address of a request to geographical metadata—typically a country code, city name, or organization. This information helps identify traffic patterns and is widely used in observability dashboards, analytics, and request routing logic.
 
+To enable this, proxies must load large Geo-IP datasets into memory and perform lookups on every request. Based on the result, the proxy may:
+
+- Add dynamic headers (e.g., `X-Country-Code`)
+- Block traffic from specific countries, regions, or organizations
+- Trigger geo-specific routing or responses
+
+While powerful, this mechanism introduces additional memory and compute overhead to the proxy, especially at high throughput. Every request incurs a lookup cost, which can significantly impact resource usage and scalability.
 
 These adds additional complexity to the system
 
