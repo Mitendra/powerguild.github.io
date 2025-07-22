@@ -30,7 +30,7 @@ While these steps are supported by many standard libraries, making them work rel
 ![](/assets/images/http_evolution.png)  
   
 
-Over the years http spec has significantly evolved. It started with simple request lines like GET /index.html in `HTTP/0.9`, moved to newline-separated headers and persistent connections in `HTTP/1.1`, and later adopted full binary framing and multiplexing in `HTTP/2`.
+Over the years, http spec has significantly evolved. It started with simple request lines like GET /index.html in `HTTP/0.9`, moved to newline-separated headers and persistent connections in `HTTP/1.1`, and later adopted full binary framing and multiplexing in `HTTP/2`.
 
 Each new version brought added features, redefined earlier assumptions, and introduced additional complexity. These changes require continual updates to existing systems, libraries, and tooling.
 
@@ -42,10 +42,10 @@ Clients and servers are often developed using different languages, frameworks, a
 
 **Examples include:**
 
-- As per the HTTP/1.1 specification, header names are case-insensitive.. However, some clients and servers expect header names in a specific case. Reverse proxies typically provide a way to preserve or normalize casing. For instance, Haproxy provides [case option](https://docs.haproxy.org/dev/configuration.html#h1-case-adjust) for preserving case and Envoy provides similar [functionality](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/header_casing).
-- HAProxy has an option to accept invalid request using [accept-unsafe-violations-in-http](https://docs.haproxy.org/dev/configuration.html#4.2-option%20accept-unsafe-violations-in-http-request). 
+- According to the HTTP/1.1 specification, header names are case-insensitive. However, some clients and servers expect header names in a specific case. Reverse proxies typically provide a way to preserve or normalize casing. For instance, Haproxy provides a [case option](https://docs.haproxy.org/dev/configuration.html#h1-case-adjust) for preserving case and Envoy provides similar [functionality](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/header_casing).
+- HAProxy has an option to accept invalid requests using [accept-unsafe-violations-in-http](https://docs.haproxy.org/dev/configuration.html#4.2-option%20accept-unsafe-violations-in-http-request). 
 
-#### Performance Consideration: One Size Doesn’t Fit All
+#### Performance Considerations: One Size Doesn’t Fit All
 
 Not all requests are the same. Some are small, while others carry large payloads. Some include long URLs or large cookies, while others do not. These variations make it difficult for proxy developers to create a single, highly efficient logic that works well in all cases. As a result, proxies often need to provide flexible configuration options and write code that can adapt to different traffic profiles.
 
@@ -55,7 +55,7 @@ These profiles can sometimes be in conflict. For example, supporting large heade
 
 Limits like maximum URL length, cookie size, and header size vary widely across platforms, and in some cases, the default settings provided by frameworks or servers are surprisingly low or outdated.
 
-Azure Front Door imposes these [limits](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits) or URL/query size:
+Azure Front Door imposes the following [limits](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits) on URL and query size:
 
 ```bash
 Maximum URL size — 8,192 bytes — Specifies maximum length of the raw URL 
@@ -104,14 +104,14 @@ Even with established standards and defined behaviors, there are always bad acto
 
 **Examples include:**
 * Carefully crafted requests with conflicting Content-Length and Transfer-Encoding headers that can lead to [HTTP request smuggling](https://medium.com/r?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHTTP_request_smuggling).
-* Invalid http version like 0.5 causes some servers to misbehave
-* Well crafted user agent can lead to [denial of service](https://blog.getambassador.io/denial-of-service-vulnerabilities-in-envoy-proxy-267c60ffc0a)
+* Invalid http version like 0.5 can cause some servers to misbehave
+* A well crafted user agent can lead to [denial of service](https://blog.getambassador.io/denial-of-service-vulnerabilities-in-envoy-proxy-267c60ffc0a)
 
 
 
 ### Request Sanitization
 
-Sanitizing incoming requests is critical for maintaining the stability, security, and performance of a proxy system. It’s more than basic filtering. Proxies need to detect malformed headers, incomplete or oversized requests, and block unwanted paths. This adds complexity and requires extra logic, memory, and CPU. Proxies must handle all of this while still performing well under pressure. Some examples:
+Sanitizing incoming requests is critical for maintaining the stability, security, and performance of a proxy system. It involves more than basic filtering. Proxies need to detect malformed headers, incomplete or oversized requests, and block unwanted paths. This adds complexity and requires extra logic, memory, and CPU. Proxies must handle all of this while still performing well under pressure. Some examples include:
 
 **Validity Checks:**
 Ensure the request conforms to protocol expectations. For example, reject requests with multiple Content-Length headers or conflicting Content-Length and Transfer-Encoding values.
@@ -124,7 +124,7 @@ Reject requests that exceed acceptable limits for URL length, headers, or cookie
 
 **Access Control:**
 Block access to restricted endpoints such as /admin, /healthcheck, or any routes intended only for internal or localhost use.
-In many cases, servers are configured to only accept requests from specific IP ranges. For example, if your static assets are hosted on a CDN, your origin server might expect occasional requests from the CDN’s IPs to refresh or preload content.
+In many cases, servers are often configured to only accept requests from specific IP ranges. For example, if your static assets are hosted on a CDN, your origin server might expect occasional requests from the CDN’s IPs to refresh or preload content.
 
 These endpoints should be accessible only by the CDN, and any requests from outside those trusted IP ranges should be blocked. This helps prevent abuse and ensures that internal or privileged endpoints are not exposed to the public internet.
 
@@ -133,7 +133,7 @@ Proxies can enforce these IP range checks early, adding a layer of security befo
 
 ### Response Sanitization
 
-Similarly outbound responses from proxy also need to be sanitized. For example, the proxy often acts as a central enforcement point for GDPR compliance by ensuring only approved cookies are included in the response. It also plays a key role in setting appropriate security headers like [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to protect clients from common web threats.
+Similarly, outbound responses from the proxy also need to be sanitized. For example, the proxy often acts as a central enforcement point for GDPR compliance by ensuring only approved cookies are included in the response. It also plays a key role in setting appropriate security headers like [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) to protect clients from common web threats.
 
 ### Header Manipulation
 Reverse proxies often need to add/remove/update headers:
@@ -148,7 +148,7 @@ Adding or removing headers requires the proxy to modify the incoming data stream
 
 However, this introduces constraints on memory usage, limits on the maximum header size the proxy can handle, and other performance-related optimizations. One common optimization is to convert all header keys to lowercase to simplify lookups and configuration. While HTTP header names are case-insensitive per the spec, this normalization can occasionally cause issues with non-compliant clients or servers.
 
-The `User-Agent` header is one of the most commonly used HTTP headers to identify the client making the request. It's especially useful for detecting whether the client is a browser, mobile device, tablet (like an iPad), or other platform—allowing applications to adjust rendering or behavior accordingly. This is also useful for detecting whether a web crawler is accessing the site.
+The `User-Agent` header is one of the most commonly used HTTP headers to identify the client making the request. It's especially useful for detecting whether the client is a browser, mobile device, tablet (like an iPad), or other platform—allowing applications to adjust rendering or behavior accordingly. It is also useful for detecting whether a web crawler is accessing the site.
 
 
 **Examples**
@@ -182,19 +182,19 @@ To enable this, proxies must load large Geo-IP datasets into memory and perform 
 
 While powerful, this mechanism introduces additional memory and compute overhead to the proxy, especially at high throughput. Every request incurs a lookup cost, which can significantly impact resource usage and scalability.
 
-These adds additional complexity to the system
+This adds additional complexity to the system
 
 ### Rewriting Paths
 In many real-world scenarios, proxies need to rewrite incoming request paths before forwarding them to the upstream service. This can serve several purposes:
 
 * Migrate /v1/* to /v2/*
-* Redirect from http → https
-* Hide implementation details (/api/products?id=123 → /p/123)
+* Redirect from HTTP to HTTPS
+* Hide implementation details (/api/products?id=123 to /p/123)
 
 This is where things like prefix stripping, redirects (301/302), or even full-blown regex rewrites come in.
 
 ## Final Thoughts
-While HTTP parsing might seem like a simple, “solved” problem, it’s precisely where performance, security, correctness, and compatibility often clash. A reverse proxy functions as both a vigilant guard and a skilled translator, tasked with handling messy, unexpected behavior without crashing. Understanding these underlying complexities is crucial for anyone building or operating scalable web services.
+While HTTP parsing might seem like a simple, “solved” problem, it’s precisely where performance, security, correctness, and compatibility often clash. A reverse proxy functions as both a vigilant guard and a skilled translator, tasked with gracefully handling messy, unexpected behavior. Understanding these underlying complexities is crucial for anyone building or operating scalable web services.
 
 
 
