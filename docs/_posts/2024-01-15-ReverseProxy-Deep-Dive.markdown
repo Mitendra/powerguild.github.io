@@ -5,6 +5,8 @@ date:   2024-01-15 08:43:56 -0800
 categories: ReverseProxy
 
 ---  
+This post is part of a series. Read Part 2 [here](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) — it dives deeper into HTTP parsing and manipulation.
+
 ## A Deep Dive into Reverse Proxy
 
 A reverse proxy is a critical piece of software commonly found in various setups within a distributed system. You may have encountered it as a proxy enabling service mesh, a load balancer distributing the load among different database instances, or an edge proxy hiding the complexity behind a site.
