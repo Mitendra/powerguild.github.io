@@ -132,10 +132,31 @@ Reverse proxies often need to add/remove/update headers:
 * Request-ID: For observability
 * Authorization: Normalize for downstream
 
-Adding/removing headers means the proxy needs change the incoming stream of data before forwarding it. This ofte means that the complete headers are stored in memory and easily accessible/updatable.
+Adding or removing headers requires the proxy to modify the incoming data stream before forwarding it. This typically means storing the full headers in memory, making them easy to inspect and update.
 
-This adds come constrains on the memory footprint, the max length of headers that proxy can read/write and other optimization related constraints.
-For easy search/configuration, one standard way of search optimization is proxy converts all the header key to lowercase. In some odd cases, this can cause trouble with clients/servers although http spec suggests it should be case insensitive
+However, this introduces constraints on memory usage, limits on the maximum header size the proxy can handle, and other performance-related optimizations. One common optimization is to convert all header keys to lowercase to simplify lookups and configuration. While HTTP header names are case-insensitive per the spec, this normalization can occasionally cause issues with non-compliant clients or servers.
+
+The `User-Agent` Header
+
+The `User-Agent` header is one of the most commonly used HTTP headers to identify the client making the request. It's especially useful for detecting whether the client is a browser, mobile device, tablet (like an iPad), or other platform—allowing applications to adjust rendering or behavior accordingly.
+
+#### Examples
+
+- **iPhone User-Agent:**
+```
+Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+```
+
+- **iPad User-Agent:**
+```
+Mozilla/5.0 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+```
+
+Over time, `User-Agent` strings have become bloated and inconsistent due to historical quirks and compatibility hacks. As a result, parsing them reliably often requires complex regular expressions.
+
+However, this opens up a potential vulnerability: a maliciously crafted `User-Agent` string can cause regex engines to backtrack excessively, leading to denial-of-service (DoS) conditions such as stack overflows or system crashes.
+
+
 
 These adds additional complexity to the system
 
