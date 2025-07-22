@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Reverse Proxy Deep Dive: Part 2"
+title:  "Reverse Proxy Deep Dive Part 2: Why HTTP Parsing at the Edge Is Harder Than It Looks"
 date:   2025-07-20 08:43:56 -0800
 categories: ReverseProxy
 ---  
@@ -19,7 +19,7 @@ At a high level, the HTTP workflow from a proxy’s perspective might seem strai
 7. Sanitize the response
 8. Forward response to the client
 
-While these steps are supported by many standard libraries, making them work reliably at scale while meeting stringent security and compliance requirements is a surprisingly complex task.
+While many standard libraries support these steps, making them work reliably at scale, and meeting strict security and compliance requirements, is surprisingly complex. From malformed requests and malicious attacks to browser quirks, this layer becomes a battleground for performance, correctness, and resilience.
 
 ## What Makes It Complex
 
@@ -68,8 +68,7 @@ Maximum HTTP response header size from health probe URL — 4,096 bytes —
 Specified the maximum length of all the response headers of health probes.
 ```
 
-Past investigations into cookie size reveal similar inconsistencies:
-https://support.convert.com/hc/en-us/articles/4511582623117-cookie-size-limits-and-the-impact-on-the-use-of-convert-goals
+[Past investigations into cookie size reveal similar inconsistencies](https://support.convert.com/hc/en-us/articles/4511582623117-cookie-size-limits-and-the-impact-on-the-use-of-convert-goals)
 
 ```bash
 Google Chrome — 4096 bytes
@@ -93,8 +92,8 @@ Typically, the following are allowed:
 81920 bytes per domain
 ```
 
-Handling quotes in Set-Cookie headers, whether single, double, or escaped, adds another layer of confusion. Some libraries interpret them strictly, others ignore them, and a few may even fail altogether. This inconsistency often leads to subtle bugs or broken behavior across browsers and frameworks. Here's a great read on the challenges of cookie handling and how it impacts major websites.
-https://grayduck.mn/2024/11/21/handling-cookies-is-a-minefield/
+Handling quotes in Set-Cookie headers, whether single, double, or escaped, adds another layer of confusion. Some libraries interpret them strictly, others ignore them, and a few may even fail altogether. This inconsistency often leads to subtle bugs or broken behavior across browsers and frameworks. Here's a great read on the challenges of [cookie handling](https://grayduck.mn/2024/11/21/handling-cookies-is-a-minefield/) and how it impacts major websites.
+
 
 #### Security: The Proxy Is the First Line of Defense
 
@@ -194,7 +193,12 @@ In many real-world scenarios, proxies need to rewrite incoming request paths bef
 This is where things like prefix stripping, redirects (301/302), or even full-blown regex rewrites come in.
 
 ## Final Thoughts
-While HTTP parsing might seem like a simple, “solved” problem, it’s precisely where performance, security, correctness, and compatibility often clash. A reverse proxy functions as both a vigilant guard and a skilled translator, tasked with gracefully handling messy, unexpected behavior. Understanding these underlying complexities is crucial for anyone building or operating scalable web services.
+While HTTP parsing might seem like a simple, “solved” problem, it’s actually where performance, security, correctness, and compatibility often collide. A reverse proxy acts as both a vigilant guard and a skilled translator, responsible for gracefully handling messy, unpredictable input. Understanding these complexities is essential for anyone building or operating scalable web services.
+
+## What’s Next
+In future posts, we’ll explore how proxies tackle service discovery, load balancing, HTTP client behavior, and observability, and how these low-level responsibilities can ripple through the architecture of an entire distributed system
+
+This post is part of a series. Read Part 1 [here](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — it dives deeper into connection management challenges.
 
 
 
