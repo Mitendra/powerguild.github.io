@@ -4,7 +4,7 @@ title:  "Reverse Proxy Deep Dive Part 2: Why HTTP Parsing at the Edge Is Harder 
 date:   2025-07-20 08:43:56 -0800
 categories: ReverseProxy
 ---  
-In [Part 1](https://medium.com/@mitendra_mahto/cross-posted-from-https-startwithawhy-com-reverseproxy-2024-01-15-reverseproxy-deep-dive-html-c3443dc3e0e5) of this series, we explored a high-level overview of reverse proxies and dived deep into connection management. This post shifts our focus to the intricate world of HTTP handling within a reverse proxy.
+In [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) of this series, we explored a high-level overview of reverse proxies and dived deep into connection management. This post shifts our focus to the intricate world of HTTP handling within a reverse proxy.
 
 ## Deep Dive into HTTP Handling
 
