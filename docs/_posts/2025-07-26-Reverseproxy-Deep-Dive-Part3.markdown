@@ -200,3 +200,55 @@ Like other strategies, this approach does not solve the problem of cold starts. 
 
 2. **Added complexity**
 The proxy must perform additional operations for random selection and comparison. However, the performance gain often justifies the cost.
+
+## Core Challenges in Real Life
+
+### 1. Warm up / Slow start
+Many Java-based services or those using heavy caching need warm-up time before handling peak load. This period varies by request type and service behavior, making a universal solution difficult. A common approach is to gradually ramp up traffic to new hosts using heuristics.
+
+
+#### how long a host can take lower amount of traffic?
+ Since capacity planning assumes each host handles a share of traffic, slow warm-up on some hosts shifts load to others, risking overload. Deployment strategies often account for temporary capacity drops. In phased or batched rollouts, the current batch must be ready to handle its share before the next one goes offline. This creates a natural upper limit on warm-up time.
+
+### 2. Local view vs global view
+Most earlier examples assume a single proxy node, but large systems often have tens or hundreds and some cases thousands. Since proxies usually operate independently without shared state, this creates challenges.
+
+For example, a new upstream host needing warm-up may get one request from each proxy node. Across the fleet, this can quickly overwhelm the host.
+
+Health checks can have a similar effect. When done without coordination, they can overload the target service.
+
+Common mitigations:
+1. Add random jitter to health checks.
+2. Limit the number of proxy nodes per upstream by splitting clusters based on use cases.
+3. Logically divide proxy fleets so each group targets a subset of upstreams. This is hard to implement and requires sophisticated coordination.
+
+### 3. Concurrency
+Even with a great algorithm, performance depends on how the proxy handles data internally. With more cores and higher throughput, contention can grow around the data structures used to pick upstream hosts.
+
+#### Shared vs Per-Thread View
+
+Proxies like Envoy use per-thread views to avoid cross-thread contention. While this improves efficiency, it weakens load balancing accuracy. With many cores and low request rates, load distribution can become uneven.
+
+Per-thread views also make sharing health checks and feedback harder, increasing error rates.
+
+HAProxy uses optimized algorithms like `ebtree` to manage contention while maintaining a global view across the threads.
+
+
+## Final Thoughts
+
+On paper, service discovery and load balancing sound like solved problems. In practice, they are a moving target, especially in dynamic environments with autoscaling, frequent deploys, and partial failures.
+
+Your proxy is expected to:
+
+- Keep up with a fast-changing view of the world
+- Route traffic efficiently and fairly
+- Recover quickly from bad hosts
+- Do all of this at scale, under pressure, without downtime
+
+And it must do this with limited visibility, inconsistent inputs, and strict performance budgets. This is why getting service discovery and load balancing right is so central and so hard.
+
+---
+
+## What’s Next
+
+In the next part of this series, we’ll look at how proxies behave as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
