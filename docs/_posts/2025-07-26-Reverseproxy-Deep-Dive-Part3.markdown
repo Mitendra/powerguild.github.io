@@ -8,7 +8,7 @@ summary: >
   Part 3 of the Reverse Proxy Deep Dive explores the complexities of service discovery and load balancing,how proxies maintain host lists, select backends, and cope with failure, scale, and churn.
 ---  
 
-In [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) of this series, we covered the foundational layer of connection management. [Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) explored the nuances of HTTP parsing and why it’s harder than it looks. Today, we’ll dive into what is arguably the most critical and visible part of a reverse proxy: **service discovery**.
+In [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) of this series, we covered the foundational layer of connection management. [Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) explored the nuances of HTTP parsing and why it’s harder than it looks. Today, we’ll dive into one of the more intricate layers of a reverse proxy: **service discovery**.
 
 
 ## What Is Service Discovery?
@@ -209,22 +209,22 @@ Passive checks are cheap, but reactive. They only trigger after enough failures 
 
 ## Final Thoughts
 
-On paper, service discovery and load balancing sound like solved problems. In practice, they are a moving target, especially in dynamic environments with autoscaling, frequent deploys, and partial failures.
+On paper, service discovery sound like solved problems. In practice, this is a moving target, especially in dynamic environments with autoscaling, frequent deploys, and partial failures.
 
-Your proxy is expected to:
+A reverse proxy is expected to:
 
-- Keep up with a fast-changing view of the world
-- Route traffic efficiently and fairly
-- Recover quickly from bad hosts
-- Do all of this at scale, under pressure, without downtime
+- Keep up with a rapidly changing view of the world
+- Detect and recover from bad hosts quickly
+- Operate reliably at scale, under pressure, with minimal or no downtime
+- Do all of this while consuming as few resources as possible
 
-And it must do this with limited visibility, inconsistent inputs, and strict performance budgets. This is why getting service discovery and load balancing right is so central and so hard.
+And it must accomplish this with limited visibility, inconsistent inputs, and tight performance constraints. That’s what makes service discovery deceptively hard..
 
 ---
 
 ## What’s Next
 
-In the next part of this series, we’ll look at how proxies behave as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
+In the next part of this series, we’ll look at **load balancing**, how proxies operates as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
 
 This post is part of a series. 
 [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
