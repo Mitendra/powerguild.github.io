@@ -10,8 +10,6 @@ summary: >
 
 In [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) of this series, we covered the foundational layer of connection management. [Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) explored the nuances of HTTP parsing and why it’s harder than it looks. Today, we’ll dive into what is arguably the most critical and visible part of a reverse proxy: **service discovery and load balancing**.
 
-Unlike edge-specific concerns like TLS or abusive clients, **discovery and balancing must work consistently across all layers of a distributed system**. Whether it's an edge gateway or a sidecar proxy deep in the service mesh, routing requests to the right place at the right time is fundamental. But ensuring it works reliably, efficiently, and at scale is where things start to get complicated
-
 ---
 
 ## What Is Service Discovery and Load Balancing?
@@ -62,28 +60,28 @@ This means the proxy now has to fully implement both DNS-over-UDP and DNS-over-T
 
 Another key concept in DNS based system is DNS [Time To Live](https://datatracker.ietf.org/doc/html/rfc2181#section-8)
 
-## DNS TTL Tradeoffs
+#### DNS TTL Tradeoffs
 
 DNS TTL determines how long the proxy should treat the resolved host list as fresh.
 
-### High TTL
+##### **High TTL**
 - Fewer DNS lookups  
 - Lower CPU and memory overhead in the proxy  
 - Less churn in connection pools  
 
-**But:**  
+But:
 - Hosts may go down, drain, or be replaced without the proxy knowing  
 - Traffic may continue flowing to broken nodes  
 
-### Low TTL
+##### **Low TTL**
 - More up-to-date host list  
 - Dead hosts removed faster  
 
-**But:**  
+But:
 - High cost from frequent DNS queries, parsing, and memory updates  
 - Adds latency, especially with large upstream lists  
 
-### Hybrid Approach
+##### **Hybrid Approach**
 Use DNS for discovery combined with healthchecks to prune bad hosts locally.
 
 - On each DNS update, fetch the full list  
@@ -93,7 +91,7 @@ Use DNS for discovery combined with healthchecks to prune bad hosts locally.
 
 It is a balance, reduce reliance on fast TTL but do not blindly trust DNS alone.
 
-We will cover healthchecks in more detail later in the healthcheck section.
+We will cover healthchecks in more detail later in the [healthcheck]( ##health-check ) section.
 
 ---
 
@@ -122,7 +120,7 @@ It’s efficient, but comes with its own set of problems:
 
 Envoy’s xDS offers a modern approach by pushing service data over gRPC. However, unless your proxy is designed for this model like Envoy is, you will need an adapter layer to handle it.
 
-## Healthcheck
+## Healthcheck {#health-check}
 
 While service discovery helps build a list of healthy nodes for routing traffic, its source of truth is not always up to date. This can happen for many reasons, such as network partitions, the high cost of healthchecks at the DNS layer, broken healthcheck setups, misbehaving components in the ecosystem, or temporary unavailability of the service.
 
@@ -158,13 +156,13 @@ In this approach, each request is sent to the next host in line. It is simple an
 
 #### Challenges
 
-1. **Maintaining a consistent view**  
+- **Maintaining a consistent view**  
    The proxy must keep a consistent view of the host list, which becomes tricky during deployments. Hosts are removed from rotation and later added back, but the order may differ. Sometimes, new hosts are entirely different from the previous ones, making consistency hard to maintain.
 
-2. **No warm-up phase**  
+- **No warm-up phase**  
    When new hosts are added, they begin receiving traffic right away, even if they are not yet fully initialized or ready to handle the load.
 
-3. **Unequal request types**  
+- **Unequal request types**  
    Not all requests are the same. Some are CPU-intensive, others take longer to process, and some are very lightweight. If traffic is distributed purely by request count, it can lead to imbalanced load—overloading some nodes while underutilizing others.
 
 ### 2. Least Connections
@@ -173,10 +171,10 @@ The proxy sends requests to the host with the fewest active connections. This ac
 
 
 #### Challenges
-1. **Burst traffic**
+- **Burst traffic**
 When a new node is added, it naturally has the fewest connections and starts receiving a disproportionate share of traffic. Since new connections can be expensive (e.g., due to TLS setup), this sudden spike can overwhelm the server, especially if it is not yet warmed up.
 
- 2. **More work for proxy**
+- **More work for proxy**
  The proxy must track all open connections, which adds operational complexity.
 
 
@@ -185,20 +183,20 @@ This strategy is useful when requests with certain properties should consistentl
 
 
 #### Challenges
-1. **uneven distribution**
+- **uneven distribution**
 Request volume and cost can vary based on the hashed property. For example, one user might generate significantly more traffic or make heavier API calls than another. This can overload some hosts while leaving others underused. One common mitigation is to apply consistent hashing only to request types that are more uniform in cost or volume, like payment or messaging APIs, and to use a property that is known to be evenly distributed.
 
-2. **Burst traffic**
+- **Burst traffic**
 Adding new nodes can cause traffic to shift abruptly, leading to bursts that may overload the new host.
 
 ### 4. Random Choice of Two
 Although it sounds counterintuitive, using randomness can lead to surprisingly good load balancing. In this approach, the proxy picks two random hosts and selects the one with fewer active connections. This method works well at scale and handles varied load types effectively, including long-lived, slow, or bursty requests.
 
 ### Challenges
-1. **No warm-up phase** 
+- **No warm-up phase** 
 Like other strategies, this approach does not solve the problem of cold starts. New hosts may still receive traffic before they are fully ready.
 
-2. **Added complexity**
+- **Added complexity**
 The proxy must perform additional operations for random selection and comparison. However, the performance gain often justifies the cost.
 
 ## Core Challenges in Real Life
