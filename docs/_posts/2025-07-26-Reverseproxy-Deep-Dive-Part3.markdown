@@ -21,6 +21,14 @@ At its core, the job is straightforward:
 It sounds simple, but keeping it correct and fast across thousands of services, tens of thousands of hosts, and a constantly changing topology turns it into one of the hardest parts of any proxy.
 
 ---
+## Goals/Constraints of Service Discovery
+Service discovery should meet the following goals:
+1. **Timely updates** : Quickly identify changes in the host list to optimize resource use. Delays lead to waste and can hurt capacity.
+2. **Fast failure detection** : Detect and remove bad hosts promptly to avoid blackholed requests and degraded user experience. This is often more urgent than adding new hosts.
+3. **Efficiency** : Minimize the resource and operational cost of maintaining the discovery system.
+4. **Simplicity** : Failures will happen, and simpler systems are easier to debug and fix under pressure.
+
+We'll look at various approaches to service discovery, the challenges involved, and how these constraints make certain choices more suitable in specific contexts.
 
 ## Ways to Discover Hosts
 
@@ -28,24 +36,34 @@ It sounds simple, but keeping it correct and fast across thousands of services, 
 
 This is the most basic form. You hardcode IPs or hostnames into your proxy config. Works great if your infrastructure doesn’t change often, like dedicated on-prem clusters where host churn is rare.
 
+If you combine this with healthcheck it becomes quite robust and can handle occasional upsatream host/app failure. While this handles scenarios of taking upstream host out of rotation, **it doesn't handle adding new hosts in rotation without restart**.
+
+A small readability improvement is using hostnames instead of IPs. Proxies typically resolve hostnames to IPs at startup using OS libraries like glibc.
+
 **Pros:**
-- Simple, predictable
-- Zero dependency
-- Most efficient
+- Simple and predictable
+- No external dependencies
+- Highly efficient
+- Quickly removes bad hosts from rotation when paired with health checks
 
 **Cons:**
 - Not dynamic
-- Requires manual coordination for scale
+- Requires restarts to add new hosts
+- Restarts can disrupt long-lived connections, so draining is needed before switching. This adds complexity and potential for user impact.
 
----
+If your system is simple, with fixed capacity planning and low traffic that doesn’t require dozens of proxy nodes, this approach might be the best fit.
+
+**Challenges at Scale**
+- Health checks can create excessive load as the number of proxy nodes grows. Without shared state, they may cause storms that overwhelm upstream hosts.
+- Health checks also consume significant proxy resources. To stay accurate and reliable, they must run frequently,leading to rapid resource depletion at scale
+
 
 ### 2. DNS-Based Discovery
+Once your DNS setup is in place, you can use it for service discovery by grouping all upstream hosts under a single FQDN. The proxy then resolves this FQDN to retrieve the list of IP addresses for those hosts. Proxy can dynmically update the host list by directly making DNS query.
 
-Instead of using a static IP, you provide a fully qualified domain name (FQDN). The proxy resolves it to get a list of IP addresses, either at startup or during runtime.
+We can offload health checks to the DNS ecosystem, reducing the load on the proxy. This decouples proxy scaling from health check concerns. By sharing state and sharding upstream hosts intelligently, we can optimize health check traffic and resource usage, independent of proxy scale.
 
-If resolution happens at startup, it's very efficient because the proxy has less work to do later. However, you’ll need to restart proxy nodes periodically to pick up changes in the upstream hosts. This is still better than a hardcoded list, but it requires coordination and doesn’t work well if hosts change frequently.
-
-Runtime resolution is better for dynamic workload, but it adds overhead. The proxy must:
+DNS based resolution is better for dynamic workload, but it adds overhead. The proxy must:
 - Parse DNS records, often mixing IPv4/IPv6
 - Handle reordering (most DNS clients shuffle the host list)
 - Diff the result vs existing list and identify the delta
@@ -93,32 +111,66 @@ It is a balance, reduce reliance on fast TTL but do not blindly trust DNS alone.
 
 We will cover healthchecks in more detail later in the [healthcheck]( ##health-check ) section.
 
----
+**Pros:**
+- Supports dynamic workloads
+- Simple to set up; DNS is a well-understood system
+- Leverages existing DNS infrastructure, minimizing new dependencies
+- Efficient when combined with smart health checks
+
+**Cons:**
+- Integrating DNS into the proxy adds complexity in the proxy and can increase resource usage
+- DNS updates may have delays when adding new hosts
+- DNS size limits impose design constraints
+
+If your system operates at moderate scale, with frequent but manageable changes, and can tolerate some delay in host updates, this approach strikes a good balance between simplicity and flexibility.
+
+**Challenges at Scale**
+- Offloading health checks to DNS reduces proxy burden but doesn’t fully solve the issue
+- Rapid updates can strain the DNS system and introduce instability
+- Lacks support for app-specific needs like slow starts or custom traffic ramp-up strategies
+
 
 ### 3. External Discovery Systems
 When DNS isn’t good enough, large systems build their own discovery control planes, often using:
 
-- ZooKeeper (classic choice for strongly consistent registries)
-- HTTP/gRPC APIs (e.g. Envoy’s xDS)
-- Runtime API + external sync agents (like HAProxy’s socket API)
+- [ZooKeeper](https://zookeeper.apache.org) (classic choice for strongly consistent registries). examples: [Pinteres](https://medium.com/@Pinterest_Engineering/zookeeper-resilience-at-pinterest-adfd8acf2a6b), [Linkedin](https://linkedin.github.io/rest.li/Dynamic_Discovery)
+- HTTP/gRPC APIs (e.g. [Envoy’s xDS](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol))
+- Runtime API + external sync agents (like [HAProxy’s socket API](https://docs.haproxy.org/3.2/management.html#9.3-add%20server))
 
-These systems push updates only when things change, reducing unnecessary polling. They also support richer metadata (like health status or locality), which DNS can't provide.
+Most modern systems address DNS limitations through several techniques:
+1. **Using richer transport protocols** (like TCP or HTTP) to bypass DNS size limits.
+2. **Embedding additional metadata** (e.g., health status, locality, slow start needs) to support app- or system-specific behaviors.
+3. **Adopting agent-based models**, where apps or hosts directly register with a central system, eliminating the need for periodic health checks and preventing health check storms.
+4. **Pushing updates only on change**, reducing unnecessary polling and minimizing proxy CPU/memory usage.
 
-Example (ZooKeeper-style):
 
-1. The proxy starts by querying ZooKeeper to get the initial host list and sets a watch to monitor changes.
-2. It maintains a persistent connection to ZooKeeper.
-3. When there is a change, the proxy receives a notification and queries ZooKeeper again to update the host list.
-4. If the connection is lost, the proxy repeats steps 1 through 3 to recover.
+Example: ZooKeeper-style Architecture
 
-This approach significantly reduces unnecessary queries when there are no changes.
-It’s efficient, but comes with its own set of problems:
+1. Each application either embeds a client thread or runs a sidecar agent that registers itself with ZooKeeper when it starts.
+2. This registration is maintained via heartbeats. If the heartbeat stops or the connection is lost, ZooKeeper automatically removes the host and notifies subscribers.
+3. Proxies initialize by querying ZooKeeper for the current host list and set a watch for changes.
+4. A persistent connection to ZooKeeper is maintained for ongoing updates.
+5. When a change occurs (e.g., a host added or removed), the proxy receives a notification and refreshes the host list.
+6. If the connection breaks, the proxy re-establishes it and re-syncs the host data.
 
-- Integration is custom (many proxies don’t natively support ZooKeeper)
-- Delete events require the client to re-fetch and compare
+This approach significantly reduces the overhead of periodic health checks and enables faster, more efficient updates.
+
+**Pros:**
+- Faster updates
+- No/minimal overhead of healthchecks
+- Works with large scale system and doesn't suffer DNS size limits
+
+**Cons:**
+- Integration is custom (many proxies don’t natively support ZooKeeper). Building TCP level protocols are much harder.
+- Depencny on a new system like zookeeper, Which comes with its own operational and resource challenges
 - These systems often favor strong consistency, which can hurt availability under load
+- Delete events require the proxy to re-fetch and compare.
+- Agent model also adds additional resource overhead and sometime can cause trouble if that eco system has problem
 
-Envoy’s xDS offers a modern approach by pushing service data over gRPC. However, unless your proxy is designed for this model like Envoy is, you will need an adapter layer to handle it.
+Envoy’s xDS takes this approach further by
+1. Favoring eventual consisteny over strong consistency for such updates
+2. Leverages gRPC for trasnport. A good gRPC client simplies some of the tcp level challenges and better abstrctions to work with.
+
 
 ## Healthcheck {#health-check}
 
@@ -143,6 +195,8 @@ To reduce cost, many systems perform **lightweight HTTP checks** regularly and *
 Instead of probing, the proxy watches live traffic. If a host consistently returns errors or times out, it is marked as unhealthy.
 
 Passive checks are cheap, but reactive. They only trigger after enough failures happen. Most systems combine both approaches, tuning frequency and aggressiveness based on traffic shape and failure patterns.
+
+---
 
 ## Load Balancing
 Another key role of a proxy is deciding which upstream host should handle each request. The goal is to maximize host utilization without overloading or underusing any server. It should also ensure a consistent user experience, such as routing users to the same host to preserve sessions or use cached data. At the same time, the proxy must handle dynamic changes like hosts being added or removed, respect server characteristics like warmup time, and avoid sending traffic to overloaded nodes.
@@ -219,6 +273,7 @@ Common mitigations:
 1. Add random jitter to health checks.
 2. Limit the number of proxy nodes per upstream by splitting clusters based on use cases.
 3. Logically divide proxy fleets so each group targets a subset of upstreams. This is hard to implement and requires sophisticated coordination.
+4. Another common but more complex approach is to let servers provide feedback. Since servers have a global view of traffic, they can include metadata in responses, such as a header asking the proxy to slow down or an error telling it to try a different host.
 
 ### 3. Concurrency
 Even with a great algorithm, performance depends on how the proxy handles data internally. With more cores and higher throughput, contention can grow around the data structures used to pick upstream hosts.
@@ -250,3 +305,10 @@ And it must do this with limited visibility, inconsistent inputs, and strict per
 ## What’s Next
 
 In the next part of this series, we’ll look at how proxies behave as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
+
+This post is part of a series. 
+[Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
+
+[Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) - It explorees the nuances of HTTP parsing and why it’s harder than it looks
+
+[Part 3](http://startwithawhy.com/reverse-proxy/networking/architecture/2025/07/26/Reverseproxy-Deep-Dive-Part3.html) - It explains the intricacies of service discovery and load balancing
