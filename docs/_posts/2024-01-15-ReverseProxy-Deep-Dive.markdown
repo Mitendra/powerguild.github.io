@@ -215,7 +215,13 @@ How about triggering timeouts and dealing with abusive clients?
 While connection management is very basic and fundamental, making it work at a very large scale is quite challenging and requires specialized handling. Each of the popular proxies has employed multiple techniques to scale it for their use cases, and each has its own pros and cons. Make sure you understand it well before choosing one over the other.
   
 **This post is already too long; the rest of the complexity related to the reverse proxy (HTTP parsing, service discovery/load balancing, HTTP client, and observability) will be discussed in subsequent posts.**
-This post is part of a series. Read Part 2 [here](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) — it dives deeper into HTTP parsing and manipulation.
+
+This post is part of a series. 
+[Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
+
+[Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) - It explorees the nuances of HTTP parsing and why it’s harder than it looks
+
+[Part 3](http://startwithawhy.com/reverse-proxy/networking/architecture/2025/07/26/Reverseproxy-Deep-Dive-Part3.html) - It explains the intricacies of service discovery
 
 
 

@@ -198,8 +198,12 @@ While HTTP parsing might seem like a simple, “solved” problem, it’s actual
 ## What’s Next
 In future posts, we’ll explore how proxies tackle service discovery, load balancing, HTTP client behavior, and observability, and how these low-level responsibilities can ripple through the architecture of an entire distributed system
 
-This post is part of a series. Read Part 1 [here](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — it dives deeper into connection management challenges.
+This post is part of a series. 
+[Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
 
+[Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) - It explorees the nuances of HTTP parsing and why it’s harder than it looks
+
+[Part 3](http://startwithawhy.com/reverse-proxy/networking/architecture/2025/07/26/Reverseproxy-Deep-Dive-Part3.html) - It explains the intricacies of service discovery
 
 
 
