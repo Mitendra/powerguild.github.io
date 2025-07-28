@@ -8,7 +8,7 @@ categories:  ReverseProxy
 This post is part of a series. 
 
 [Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
-[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explores the nuances of HTTP parsing and why it’s harder than it looks.   
 [Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
 
 ---
@@ -24,10 +24,10 @@ But doing this accurately and efficiently across thousands of services, tens of 
 ## Goals and Constraints of Service Discovery
 An effective service discovery system should strive to meet the following goals:
 
-1. **Timely updates** : Quickly identify changes in the host list to optimize resource use. Delays lead to waste and can hurt capacity.
-2. **Fast failure detection** : Detect and remove bad hosts promptly to avoid blackholed requests and degraded user experience. This is often more urgent than adding new hosts.
-3. **Efficiency** : Minimize the resource and operational cost of maintaining the discovery system.
-4. **Simplicity** : Failures will happen, and simpler systems are easier to debug and fix under pressure.
+1. **Timely updates**: Quickly identify changes in the host list to optimize resource use. Delays lead to waste and can hurt capacity.
+2. **Fast failure detection**: Detect and remove bad hosts promptly to avoid blackholed requests and degraded user experience. This is often more urgent than adding new hosts.
+3. **Efficiency**: Minimize the resource and operational cost of maintaining the discovery system.
+4. **Simplicity**: Failures will happen, and simpler systems are easier to debug and fix under pressure.
 
 In the following sections, we’ll explore various approaches to service discovery, the challenges they face, and how these constraints influence the suitability of each approach in different environments.
 
@@ -35,15 +35,15 @@ In the following sections, we’ll explore various approaches to service discove
 
 
 ![](/assets/images/haproxy_config_service_discovery.png)
-*HAProxy config showing static ip, dns slots, healthcheck, healthcheck with different frequency*
+*HAProxy config showing static ip, dns slots, health-check, health-check with different frequency*
 
 [HAProxy Config Example Github gist](https://gist.github.com/Mitendra/69d1d378e0a17e3747947cc5b1f4cc1a)
 
 ### 1. Static Host Lists
 
-This is the most basic form. You hardcode IPs or hostnames into your proxy config. Works great if your infrastructure doesn’t change often, like dedicated on-prem clusters where host churn is rare.
+This is the most basic form of service discovery. IPs or hostnames are hardcoded into the proxy configuration. It works well in environments where the infrastructure remains relatively static, such as dedicated on-premises clusters with minimal host churn.
 
-If you combine this with healthcheck it becomes quite robust and can handle occasional upsatream host/app failure. While this handles scenarios of taking upstream host out of rotation, **it doesn't handle adding new hosts in rotation without restart**.
+When combined with health checks, this approach becomes quite robust and can tolerate occasional upstream host or application failures. While it effectively removes failing hosts from rotation, **it doesn't handle adding new hosts in rotation without restart**.
 
 A small readability improvement is using hostnames instead of IPs. Proxies typically resolve hostnames to IPs at startup using OS libraries like glibc.
 
@@ -58,28 +58,28 @@ A small readability improvement is using hostnames instead of IPs. Proxies typic
 - Requires restarts to add new hosts
 - Restarts can disrupt long-lived connections, so draining is needed before switching. This adds complexity and potential for user impact.
 
-If your system is simple, with fixed capacity planning and low traffic that doesn’t require dozens of proxy nodes, this approach might be the best fit.
+For systems with fixed capacity planning, low traffic, and no need for dozens of proxy nodes, this approach can be a strong fit.
 
 **Challenges at Scale**
 - Health checks can create excessive load as the number of proxy nodes grows. Without shared state, they may cause storms that overwhelm upstream hosts.
-- Health checks also consume significant proxy resources. To stay accurate and reliable, they must run frequently,leading to rapid resource depletion at scale
+- Health checks also consume significant proxy resources. To stay accurate and reliable, they must run frequently, leading to rapid resource depletion at scale
 
 
 ### 2. DNS-Based Discovery
-Once your DNS setup is in place, you can use it for service discovery by grouping all upstream hosts under a single FQDN. The proxy then resolves this FQDN to retrieve the list of IP addresses for those hosts. Proxy can dynmically update the host list by directly making DNS query.
+Once DNS is configured, it can be used for service discovery by grouping all upstream hosts under a single FQDN. The proxy resolves this FQDN to obtain the list of IP addresses for those hosts and can dynamically update the host list by performing DNS queries directly.
 
 We can offload health checks to the DNS ecosystem, reducing the load on the proxy. This decouples proxy scaling from health check concerns. By sharing state and sharding upstream hosts intelligently, we can optimize health check traffic and resource usage, independent of proxy scale.
 
-DNS based resolution is better for dynamic workload, but it adds overhead. The proxy must:
+DNS-based resolution is better for dynamic workload, but it adds overhead. The proxy must:
 - Parse DNS records, often mixing IPv4/IPv6
 - Handle reordering (most DNS clients shuffle the host list)
 - Diff the result vs existing list and identify the delta
 - Remove stale entries, shut down old connections
 - Add new entries into the rotation
 
-**This gets worse when the host list is large (say, 200+ entries)**. If the algorithm isn't efficient, even something as simple as diffing host lists can become a bottleneck. HAProxy has encountered challenges with [this](https://github.com/haproxy/haproxy/issues/1185) in the past.
+**This gets worse when the host list is large (say, 200+ entries)**. If the algorithm isn't efficient, even something as simple as diffing host lists can become a bottleneck. HAProxy had encountered challenges with [this](https://github.com/haproxy/haproxy/issues/1185) in the past.
 
-Most DNS traffic relies on UDP, which has a strict packet size limit, [512 bytes](https://datatracker.ietf.org/doc/html/rfc1035) for traditional and [4096 bytes](https://www.rfc-editor.org/rfc/rfc6891.txt) with EDNS(0). If the response exceeds that limit, it gets truncated. Then you need to retry over TCP, but even TCP has a limit ([65,535 bytes](https://www.rfc-editor.org/rfc/rfc6891.txt)) on how many records it can return.
+Most DNS traffic relies on UDP, which has a strict packet size limit, [512 bytes](https://datatracker.ietf.org/doc/html/rfc1035) for traditional and [4096 bytes](https://www.rfc-editor.org/rfc/rfc6891.txt) with EDNS(0). If the response exceeds that limit, it gets truncated. Then we need to retry over TCP, but even TCP has a limit ([65,535 bytes](https://www.rfc-editor.org/rfc/rfc6891.txt)) on how many records it can return.
 
 This means the proxy now has to fully implement both DNS-over-UDP and DNS-over-TCP, just to get a list of hosts.
 
@@ -107,16 +107,16 @@ But:
 - Adds latency, especially with large upstream lists  
 
 ##### **Hybrid Approach**
-Use DNS for discovery combined with healthchecks to prune bad hosts locally.
+Use DNS for discovery combined with health-checks to prune bad hosts locally.
 
 - On each DNS update, fetch the full list  
-- Periodically run healthchecks on each host (HTTP or TCP probes)  
+- Periodically run health-checks on each host (HTTP or TCP probes)  
 - Temporarily remove failing nodes  
 - Let DNS eventually catch up and remove bad entries  
 
-It is a balance, reduce reliance on fast TTL but do not blindly trust DNS alone.
+It is a balance: reduce reliance on fast TTL but do not blindly trust DNS alone.
 
-We will cover healthchecks in more detail later in the [healthcheck]( ##health-check ) section.
+We will cover health-checks in more detail later in the [health-check]( ##health-check ) section.
 
 **Pros:**
 - Supports dynamic workloads
@@ -129,7 +129,7 @@ We will cover healthchecks in more detail later in the [healthcheck]( ##health-c
 - DNS updates may have delays when adding new hosts
 - DNS size limits impose design constraints
 
-If your system operates at moderate scale, with frequent but manageable changes, and can tolerate some delay in host updates, this approach strikes a good balance between simplicity and flexibility.
+In systems operating at moderate scale, with frequent but manageable changes and tolerance for some delay in host updates, this approach offers a strong balance between simplicity and flexibility.
 
 **Challenges at Scale**
 - Offloading health checks to DNS reduces proxy burden but doesn’t fully solve the issue
@@ -144,7 +144,7 @@ If your system operates at moderate scale, with frequent but manageable changes,
 
 When DNS isn’t good enough, large systems build their own discovery control planes, often using:
 
-- [ZooKeeper](https://zookeeper.apache.org) (classic choice for strongly consistent registries). examples: [Pinteres](https://medium.com/@Pinterest_Engineering/zookeeper-resilience-at-pinterest-adfd8acf2a6b), [Linkedin](https://linkedin.github.io/rest.li/Dynamic_Discovery)
+- [ZooKeeper](https://zookeeper.apache.org) (classic choice for strongly consistent registries). Examples: [Pinterest](https://medium.com/@Pinterest_Engineering/zookeeper-resilience-at-pinterest-adfd8acf2a6b), [Linkedin](https://linkedin.github.io/rest.li/Dynamic_Discovery)
 - HTTP/gRPC APIs (e.g. [Envoy’s xDS](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol))
 - Runtime API + external sync agents (like [HAProxy’s socket API](https://docs.haproxy.org/3.2/management.html#9.3-add%20server))
 
@@ -168,38 +168,38 @@ This approach significantly reduces the overhead of periodic health checks and e
 
 **Pros:**
 - Faster updates
-- No/minimal overhead of healthchecks
+- No/minimal overhead of health-checks
 - Works with large scale system and doesn't suffer DNS size limits
 
 **Cons:**
 - Integration is custom (many proxies don’t natively support ZooKeeper). Building TCP level protocols are much harder.
-- Depencny on a new system like zookeeper, Which comes with its own operational and resource challenges
+- Dependency on a new system like ZooKeeper, Which comes with its own operational and resource challenges
 - These systems often favor strong consistency, which can hurt availability under load
 - Delete events require the proxy to re-fetch and compare.
-- Agent model also adds additional resource overhead and sometime can cause trouble if that eco system has problem
+- Agent model also adds additional resource overhead and sometimes can cause trouble if that ecosystem has problem
 
 Envoy’s xDS takes this approach further by
-1. Favoring eventual consisteny over strong consistency for such updates
-2. Leverages gRPC for trasnport. A good gRPC client simplies some of the tcp level challenges and better abstrctions to work with.
+1. Favoring eventual consistency over strong consistency for such updates
+2. Leverages gRPC for transport. A good gRPC client simplifies some of the tcp level challenges and better abstractions to work with.
 
 
-## Healthcheck {#health-check}
+## health-check {#health-check}
 
-While service discovery helps build a list of healthy nodes for routing traffic, its source of truth is not always up to date. This can happen for many reasons, such as network partitions, the high cost of healthchecks at the DNS layer, broken healthcheck setups, misbehaving components in the ecosystem, or temporary unavailability of the service.
+While service discovery helps build a list of healthy nodes for routing traffic, its source of truth is not always up to date. This can happen for many reasons, such as network partitions, the high cost of health-checks at the DNS layer, broken health-check setups, misbehaving components in the ecosystem, or temporary unavailability of the service.
 
 Although the goal is to make service discovery as accurate as possible and remove bad hosts quickly, achieving that level of precision is a difficult problem.
 
-To guard against such scenarios, proxies often perform their own healthchecks as a fallback.
+To guard against such scenarios, proxies often perform their own health-checks as a fallback.
 
 ### Active Health Checks
 
-The proxy periodically probes each host, typically with a simple HTTP or TCP request, to confirm it's alive. Simple in theory, but expensive in practice:
+The proxy periodically probes each host, typically with a simple HTTP or TCP request, to confirm it's alive. Seems simple in theory, but expensive in practice:
 
 - Thousands of hosts mean thousands of probes
 - At scale, this burns CPU and network, especially if checks involve HTTPS or TLS handshakes
 - Load spikes can happen if all proxies check all hosts at the same time
 
-To reduce cost, many systems perform **lightweight HTTP checks** regularly and **heavier HTTPS checks less frequently**, such as 1 out of every 50 probes.
+To reduce cost, many systems perform **lightweight HTTP checks** regularly and **heavier HTTPS checks less frequently**, such as one out of every fifty probes.
 
 ### Passive Health Checks
 
@@ -211,7 +211,7 @@ Passive checks are cheap, but reactive. They only trigger after enough failures 
 
 ## Final Thoughts
 
-On paper, service discovery sound like solved problems. In practice, this is a moving target, especially in dynamic environments with autoscaling, frequent deploys, and partial failures.
+On paper, service discovery sound like a solved problem. In practice, this is a moving target, especially in dynamic environments with autoscaling, frequent deploys, and partial failures.
 
 A reverse proxy is expected to:
 
@@ -220,20 +220,20 @@ A reverse proxy is expected to:
 - Operate reliably at scale, under pressure, with minimal or no downtime
 - Do all of this while consuming as few resources as possible
 
-And it must accomplish this with limited visibility, inconsistent inputs, and tight performance constraints. That’s what makes service discovery deceptively hard..
+And it must accomplish this with limited visibility, inconsistent inputs, and tight performance constraints. That’s what makes service discovery deceptively hard.
 
 ---
 
 ## What’s Next
 
-In the next part of this series, we’ll look at **load balancing**, how proxies operates as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
+In the next part of this series, we’ll look at **load balancing**, how proxies operate as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
 
 ---
 
 This post is part of a series. 
 
 [Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
-[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explores the nuances of HTTP parsing and why it’s harder than it looks.   
 [Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
 
 --- 
