@@ -2,14 +2,15 @@
 layout: post
 title:  "Reverse Proxy Deep Dive Part 2: Why HTTP Parsing at the Edge Is Harder Than It Looks"
 date:   2025-07-20 08:43:56 -0800
-categories: ReverseProxy  
+categories: ReverseProxy   
 ---
+---  
 
 This post is part of a series. 
 
-[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
-[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
-[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - The nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - The intricacies of service discovery.
 
 ---
 
@@ -209,9 +210,9 @@ In future posts, we’ll explore how proxies tackle service discovery, load bala
 
 This post is part of a series. 
 
-[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
-[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
-[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - The nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - The intricacies of service discovery.
 
 ---
 
