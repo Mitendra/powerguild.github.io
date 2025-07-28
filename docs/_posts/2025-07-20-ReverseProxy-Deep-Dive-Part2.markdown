@@ -2,9 +2,16 @@
 layout: post
 title:  "Reverse Proxy Deep Dive Part 2: Why HTTP Parsing at the Edge Is Harder Than It Looks"
 date:   2025-07-20 08:43:56 -0800
-categories: ReverseProxy
----  
-In [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) of this series, we explored a high-level overview of reverse proxies and dived deep into connection management. This post shifts our focus to the intricate world of HTTP handling within a reverse proxy.
+categories: ReverseProxy  
+---
+
+This post is part of a series. 
+
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
+
+---
 
 ## Deep Dive into HTTP Handling
 
@@ -198,12 +205,15 @@ While HTTP parsing might seem like a simple, “solved” problem, it’s actual
 ## What’s Next
 In future posts, we’ll explore how proxies tackle service discovery, load balancing, HTTP client behavior, and observability, and how these low-level responsibilities can ripple through the architecture of an entire distributed system
 
+---
+
 This post is part of a series. 
-[Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
 
-[Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) - It explorees the nuances of HTTP parsing and why it’s harder than it looks
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
 
-[Part 3](http://startwithawhy.com/reverse-proxy/networking/architecture/2025/07/26/Reverseproxy-Deep-Dive-Part3.html) - It explains the intricacies of service discovery
+---
 
 
 

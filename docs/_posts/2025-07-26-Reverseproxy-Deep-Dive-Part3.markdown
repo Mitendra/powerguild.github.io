@@ -2,14 +2,16 @@
 layout: post
 title:  "Reverse Proxy Deep Dive Part 3: The Hidden Complexity of Service Discovery"
 date:   2025-07-26 08:43:56 -0800
-categories:  [reverse-proxy, networking, architecture]
-tags: [service discovery, proxies, infrastructure, dns]
-summary: >
-  Part 3 of the Reverse Proxy Deep Dive explores the complexities of service discovery and load balancing,how proxies maintain host lists, select backends, and cope with failure, scale, and churn.
----  
+categories:  ReverseProxy
+---
 
-In [Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) of this series, we covered the foundational layer of connection management. [Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) explored the nuances of HTTP parsing and why it’s harder than it looks. Today, we’ll dive into one of the more intricate layers of a reverse proxy: **service discovery**.
+This post is part of a series. 
 
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
+
+---
 
 ## What Is Service Discovery?
 
@@ -226,9 +228,12 @@ And it must accomplish this with limited visibility, inconsistent inputs, and ti
 
 In the next part of this series, we’ll look at **load balancing**, how proxies operates as **HTTP clients**. We will dive into connection pooling, TLS reuse, retry logic, and why this layer can be the silent source of bugs and latency.
 
+---
+
 This post is part of a series. 
-[Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
 
-[Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) - It explorees the nuances of HTTP parsing and why it’s harder than it looks
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
 
-[Part 3](http://startwithawhy.com/reverse-proxy/networking/architecture/2025/07/26/Reverseproxy-Deep-Dive-Part3.html) - It explains the intricacies of service discovery
+--- 

@@ -4,8 +4,15 @@ title:  "Revere proxy deep dive"
 date:   2024-01-15 08:43:56 -0800
 categories: ReverseProxy
 
----  
-This post is part of a series. Read Part 2 [here](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) — it dives deeper into HTTP parsing and manipulation.
+---
+
+This post is part of a series. 
+
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
+
+---
 
 ## A Deep Dive into Reverse Proxy
 
@@ -216,12 +223,15 @@ While connection management is very basic and fundamental, making it work at a v
   
 **This post is already too long; the rest of the complexity related to the reverse proxy (HTTP parsing, service discovery/load balancing, HTTP client, and observability) will be discussed in subsequent posts.**
 
+---
+
 This post is part of a series. 
-[Part 1](https://startwithawhy.com/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html) — It dives deeper into connection management challenges.
 
-[Part 2](https://startwithawhy.com/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html) - It explorees the nuances of HTTP parsing and why it’s harder than it looks
+[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - It dives deeper into connection management challenges.  
+[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - It explorees the nuances of HTTP parsing and why it’s harder than it looks.   
+[Part 3]({{ "reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - It explains the intricacies of service discovery.
 
-[Part 3](http://startwithawhy.com/reverse-proxy/networking/architecture/2025/07/26/Reverseproxy-Deep-Dive-Part3.html) - It explains the intricacies of service discovery
+---
 
 
 
