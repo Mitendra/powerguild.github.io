@@ -1,11 +1,10 @@
 ---
 layout: post
-title:  "Reverse Proxy Deep Dive Part 3: The Hidden Complexity of Service Discovery"
+title:  "Reverse Proxy Deep Dive (Part 3): The Hidden Complexity of Service Discovery"
 date:   2025-07-26 08:43:56 -0800
 categories:  ReverseProxy
 ---
----  
-
+---
 This post is part of a series. 
 
 [Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.  
@@ -223,7 +222,6 @@ A reverse proxy is expected to:
 
 And it must accomplish this with limited visibility, inconsistent inputs, and tight performance constraints. That’s what makes service discovery deceptively hard.
 
----
 
 ## What’s Next
 
