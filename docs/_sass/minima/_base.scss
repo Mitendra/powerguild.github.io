@@ -38,6 +38,7 @@ p, blockquote, pre,
 ul, ol, dl, figure,
 %vertical-rhythm {
   margin-bottom: $spacing-unit / 2;
+  margin-top: $spacing-unit / 2;
 }
 
 
@@ -271,3 +272,10 @@ $accent-color: #3A7AFE;
   // Optional enhancement for depth
   // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
+
+hr {
+  margin: 0;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
