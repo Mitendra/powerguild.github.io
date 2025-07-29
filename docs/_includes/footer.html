@@ -1,0 +1,42 @@
+<footer class="site-footer h-card">
+  <data class="u-url" href="{{ "/" | relative_url }}"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Subscribe</h2>
+    <p>I share insights on distributed systems and related software topics. Subscribe for updates:
+      
+
+   <div class="footer-col-wrapper">
+    <div class="footer-col footer-col-1">
+    <a href="{{ site.url }}/feed.xml">
+      <svg class="svg-icon social-icon-rss" width="16" height="16" viewBox="0 0 24 24" aria-label="RSS icon" role="img">
+        <use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
+      </svg>
+      <span>Subscribe via RSS</span>
+    </a>  
+  </div>
+
+  <div class="footer-col footer-col-2">
+    <a href="https://www.twitter.com/{{ site.twitter_username | cgi_escape | escape }}">
+      <svg class="svg-icon social-icon-twitter" width="16" height="16" viewBox="0 0 24 24" aria-label="Twitter icon" role="img">
+        <use xlink:href="{{ '/assets/minima-social-icons.svg#twitter' | relative_url }}"></use>
+      </svg>
+      <span>Follow me on Twitter</span>
+    </a>
+  </div>
+
+
+  <div class="footer-col footer-col-3">
+    <a href="https://buttondown.com/mitendra">
+      <svg class="svg-icon social-icon-gmail" width="16" height="16" viewBox="0 0 24 24" aria-label="Email icon" role="img">
+        <use xlink:href="{{ '/assets/minima-social-icons.svg#gmail' | relative_url }}"></use>
+      </svg>
+      <span>Join my newsletter</span>
+    </a>
+  </div>
+</div>
+
+  </div>
+
+</footer>

@@ -282,3 +282,41 @@ hr {
   margin-bottom: 1.5rem;
 }
 
+a .social-icon-twitter {
+  fill: #007aff; // match your link color
+}
+a:hover .social-icon-twitter {
+  fill: #005fcc; // or whatever hover color you use
+}
+
+a .social-icon-rss {
+  fill: #FF6600; // Classic RSS orange
+}
+
+a:hover .social-icon-rss {
+  fill: #CC5200; // Slightly darker on hover
+}
+
+a .social-icon-github {
+  fill: #333333; /* GitHub dark gray */
+}
+
+a:hover .social-icon-github {
+  fill: #000000; /* Pure black on hover */
+}
+
+a .social-icon-gmail {
+  fill: #D14836; /* Gmail red */
+}
+a:hover .social-icon-gmail {
+  fill: #A63529; /* Darker red on hover */
+}
+
+.social-icon-email {
+  fill: #D14836;  // Gmail red
+}
+.social-icon-email:hover {
+  fill: #A63529;
+}
+
+
