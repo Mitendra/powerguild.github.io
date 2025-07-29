@@ -31,8 +31,7 @@ github_username:  Mitendra
 theme: minima
 plugins:
   - jekyll-feed
-# Google Analytics
-google_analytics: G-PSRENC9XX2
+
 markdown: kramdown
 highlighter: rouge
 comments:
