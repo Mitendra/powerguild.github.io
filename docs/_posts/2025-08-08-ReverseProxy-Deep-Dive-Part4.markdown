@@ -16,6 +16,8 @@ This post is part of a series.
 ---
 
 ## Load Balancing
+
+![](/assets/images/round_robin.jpeg)
 One of the most critical roles for a reverse proxy is load balancing requests across different upstream hosts. From a list of upstream servers, the proxy must decide where each incoming request should go.
 
 The primary goals of load balancing are:
@@ -29,7 +31,7 @@ Round-robin might work fine at small scale, but as systems grow, load balancing 
 
 ## What Makes Load Balancing Harder at Scale
 
-### 1. All Requests Are Not Equal
+### All Requests Are Not Equal
 
 While round robin sends an equal number of requests to each host, it doesn't account for how different those requests may be. In large systems:
 
@@ -44,14 +46,14 @@ Imagine two types of requests: image uploads (large payloads, heavy compute) and
 
 **Alternatives:**
 
-* **Least Connections**: Distribute requests based on active connections.
-* **Power of Two Choices (P2C)**: Randomly pick two hosts and send the request to the one with fewer active connections. A randomized algorithm but simple, fast, and surprisingly effective.
+* **Least Connections**: Distributes requests to the host with the fewest active connections. This requires the proxy to maintain accurate connection tracking.
+* [Power of Two Choices (P2C)](https://www.eecs.harvard.edu/~michaelm/postscripts/mythesis.pdf): Randomly pick two hosts and send the request to the one with fewer active connections. A randomized algorithm but simple, fast, and [surprisingly effective](https://www.haproxy.com/blog/power-of-two-load-balancing) in various scenarios.
 
-### 2. Custom Server Requirements
+### Custom Server Requirements
 
 Some requests require stickiness to specific hosts due to:
 
-* Cache locality
+* Caching effectiveness
 * Session persistence
 * Sharding (e.g., based on user ID)
 
@@ -61,7 +63,7 @@ Round robin fails here. One common strategy is **hashing** on a request property
 
 * Use **multi-level hashing** or **consistent hashing with virtual nodes** to reduce imbalance while preserving routing guarantees.
 
-### 3. Server List is Not Static
+### Server List is Not Static
 
 In dynamic environments, the list of upstream hosts is in constant flux due to deployments, auto-scaling, or node failures. Kubernetes further complicates this by frequently changing pod IPs. Even a simple restart can result in a new address, making upstream tracking more volatile and requiring robust discovery and update mechanisms.
 
@@ -80,11 +82,11 @@ To mitigate this, proxies can incorporate additional algorithms and techniques s
 * **Slow start** to gradually ramp up traffic to new or recently recovered hosts, avoiding sudden overload
 * **Weighted load balancing** (e.g., weighted round robin or weighted least connections) to assign traffic proportionally, allowing smoother integration of hosts with lower initial capacity.
 
-##### Warm up / Slow start
+#### Warm Up / Slow Start
 Many Java-based services or those using heavy caching need warm-up time before handling peak load. This period varies by request type and service behavior, making a universal solution difficult. A common approach is to gradually ramp up traffic to new hosts using heuristics.
 
 
-##### how long a host can take lower amount of traffic?
+#### How Long Can a Host Handle Reduced Traffic?
  Since capacity planning assumes each host handles a share of traffic, slow warm-up on some hosts shifts load to others, risking overload. Deployment strategies often account for temporary capacity drops. In phased or batched rollouts, the current batch must be ready to handle its share before the next one goes offline. This creates a natural upper limit on warm-up time.
 
 
@@ -93,7 +95,7 @@ Many Java-based services or those using heavy caching need warm-up time before h
 * **Draining Strategy:** For smoother shutdowns, upstream servers often provide a draining mechanism where they stop accepting new connections but continue serving existing ones for a while. Proxies must support this by keeping existing connections alive while excluding the draining host from load balancing for new requests. This typically involves a "half-open" or "half-closed" state, which adds complexity to proxy logic and connection management.
 
 
-### 4. Global View vs Local View
+### Global View vs Local View
 
 In large-scale systems, proxy nodes operate independently, each with only a local view of the system. Their load balancing decisions are made in isolation, often without coordination or global state, which can lead to suboptimal traffic distribution and resource inefficiencies.
 
@@ -110,7 +112,7 @@ There are often complex mechanisms to handle these scenarios:
 
 
 
-### 5. Proxy architecture
+### Proxy Architecture
 
 Proxy architectures can amplify load balancing challenges, especially when handling concurrency on machines with many CPU cores. Some proxies do not share load balancing information across threads, even on the same host, which widens the gap between local and global views. Envoy is a notable example—running Envoy on servers with many threads (such as 64 cores) can make uneven load distribution more noticeable.
 
@@ -123,6 +125,10 @@ In contrast, HAProxy uses optimized data structures like `ebtree` to manage cont
 
 
 ## Common load balancing algoithims and challenges
+
+### [Round-Robin](https://www.cloudns.net/blog/round-robin-load-balancing/)
+
+The proxy sends requests to the host with the fewest active connections. This accounts for variable load per request, such as long-lived versus short-lived calls.
 
 In this approach, each request is sent to the next host in line. It is simple and fair, but only if all hosts are healthy, fully warmed up, and equally performant.
 
@@ -137,10 +143,11 @@ In this approach, each request is sent to the next host in line. It is simple an
 - **Unequal request types**  
    Not all requests are the same. Some are CPU-intensive, others take longer to process, and some are very lightweight. If traffic is distributed purely by request count, it can lead to imbalanced load—overloading some nodes while underutilizing others.
 
-### 2. Least Connections
+Typically, load balancers implement a basic enhancement of [weighted round robin](https://how.dev/answers/what-is-the-weighted-round-robin-load-balancing-technique) to address the static nature of the original algorithm.
+
+### [Least Connections](https://www.digitalocean.com/community/tutorials/an-introduction-to-haproxy-and-load-balancing-concepts#leastconn)
 
 The proxy sends requests to the host with the fewest active connections. This accounts for variable load per request, such as long-lived versus short-lived calls.
-
 
 #### Challenges
 - **Burst traffic**
@@ -150,7 +157,7 @@ When a new node is added, it naturally has the fewest connections and starts rec
  The proxy must track all open connections, which adds operational complexity.
 
 
-### 3. Consistent hashing
+### [Consistent hashing](https://highscalability.com/consistent-hashing-algorithm/)
 This strategy is useful when requests with certain properties should consistently go to the same upstream host. It's often used to improve cache hit rates or maintain session persistence. The proxy applies a hash function on a specific request attribute (like user ID or session ID) to pick a host.
 
 
@@ -161,27 +168,15 @@ Request volume and cost can vary based on the hashed property. For example, one 
 - **Burst traffic**
 Adding new nodes can cause traffic to shift abruptly, leading to bursts that may overload the new host.
 
-### 4. Random Choice of Two
-Although it sounds counterintuitive, using randomness can lead to surprisingly good load balancing. In this approach, the proxy picks two random hosts and selects the one with fewer active connections. This method works well at scale and handles varied load types effectively, including long-lived, slow, or bursty requests.
+### [Random Choice of Two](https://www.eecs.harvard.edu/~michaelm/postscripts/mythesis.pdf)
+Although it sounds counterintuitive, using randomness can lead to [surprisingly](https://www.haproxy.com/blog/power-of-two-load-balancing) good load balancing. In this approach, the proxy picks two random hosts and selects the one with fewer active connections. This method works well at scale and handles varied load types effectively, including long-lived, slow, or bursty requests.
 
-### Challenges
+#### Challenges
 - **No warm-up phase** 
 Like other strategies, this approach does not solve the problem of cold starts. New hosts may still receive traffic before they are fully ready.
 
 - **Added complexity**
 The proxy must perform additional operations for random selection and comparison. However, the performance gain often justifies the cost.
-
-
-## More Challenges in Real Life
-
-### 1. Warm up / Slow start
-Many Java-based services or those using heavy caching need warm-up time before handling peak load. This period varies by request type and service behavior, making a universal solution difficult. A common approach is to gradually ramp up traffic to new hosts using heuristics.
-
-
-#### how long a host can take lower amount of traffic?
- Since capacity planning assumes each host handles a share of traffic, slow warm-up on some hosts shifts load to others, risking overload. Deployment strategies often account for temporary capacity drops. In phased or batched rollouts, the current batch must be ready to handle its share before the next one goes offline. This creates a natural upper limit on warm-up time.
-
-
 
 ---
 
