@@ -61,7 +61,7 @@ Round robin fails here. One common strategy is **hashing** on a request property
 
 **Improvement:**
 
-* Use **multi-level hashing** or **consistent hashing with virtual nodes** to reduce imbalance while preserving routing guarantees.
+* Use **multi-level hashing** or **[consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing) with virtual nodes** to reduce imbalance while preserving routing guarantees.
 
 ### Server List is Not Static
 
@@ -78,11 +78,11 @@ In dynamic environments, the list of upstream hosts is in constant flux due to d
 **Mitigations:**
 To mitigate this, proxies can incorporate additional algorithms and techniques such as:
 
-* **Consistent hashing** to minimize client reassignment during host changes or rebalancing.
-* **Slow start** to gradually ramp up traffic to new or recently recovered hosts, avoiding sudden overload
-* **Weighted load balancing** (e.g., weighted round robin or weighted least connections) to assign traffic proportionally, allowing smoother integration of hosts with lower initial capacity.
+* **[Consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing)** to minimize client reassignment during host changes or rebalancing.
+* **[Slow Start](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/slow_start)** to gradually ramp up traffic to new or recently recovered hosts, avoiding sudden overload
+* **[Weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#weighted-round-robin)** (e.g., weighted round robin or weighted least connections) to assign traffic proportionally, allowing smoother integration of hosts with lower initial capacity.
 
-#### Warm Up / [Slow Start](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/slow_start)
+#### [Warm Up/Slow Start](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/slow_start)
 Many Java-based services or those using heavy caching need warm-up time before handling peak load. This period varies by request type and service behavior, making a universal solution difficult. A common approach is to [gradually ramp up](https://docs.haproxy.org/3.2/configuration.html#5.2-slowstart) traffic to new hosts using heuristics.
 
 
@@ -92,7 +92,7 @@ Many Java-based services or those using heavy caching need warm-up time before h
 
 #### Removing a Host
 
-* **Draining Strategy:** For smoother shutdowns, upstream servers often provide a draining mechanism where they stop accepting new connections but continue serving existing ones for a while. Proxies must support this by keeping existing connections alive while excluding the draining host from load balancing for new requests. This typically involves a "half-open" or "half-closed" state, which adds complexity to proxy logic and connection management.
+* **Draining Strategy:** For smoother shutdowns, upstream servers often provide a [draining](https://docs.haproxy.org/3.2/management.html#9.3-set%20server) mechanism where they stop accepting new connections but continue serving existing ones for a while. Proxies must support this by keeping existing connections alive while excluding the draining host from load balancing for new requests. This typically involves a "half-open" or "half-closed" state, which adds complexity to proxy logic and connection management.
 
 
 ### Global View vs Local View
@@ -121,7 +121,7 @@ Proxies like [Envoy use per-thread](https://www.envoyproxy.io/docs/envoy/latest/
 
 Per-thread views also complicate sharing health checks and feedback between threads, potentially increasing error rates.
 
-In contrast, HAProxy uses optimized data structures like `[ebtree](https://wtarreau.blogspot.com/2011/12/elastic-binary-trees-ebtree.html)` to [manage contention](https://wtarreau.blogspot.com/2018/02/progressive-locks-fast-upgradable.html) while maintaining a global view across threads, which improves load balancing precision.
+In contrast, HAProxy uses optimized data structures like [ebtree](https://wtarreau.blogspot.com/2011/12/elastic-binary-trees-ebtree.html) to [manage contention](https://wtarreau.blogspot.com/2018/02/progressive-locks-fast-upgradable.html) while maintaining a global view across threads, which improves load balancing precision.
 
 
 ## Common load balancing algoithims and challenges
