@@ -117,11 +117,11 @@ There are often complex mechanisms to handle these scenarios:
 Proxy architectures can amplify load balancing challenges, especially when handling concurrency on machines with many CPU cores. Some proxies do not share load balancing information across threads, even on the same host, which widens the gap between local and global views. Envoy is a notable example—running Envoy on servers with many threads (such as 64 cores) can make uneven load distribution more noticeable.
 
 **Shared vs Per-Thread View**
-Proxies like Envoy use per-thread views to avoid cross-thread contention. While this improves efficiency, it reduces load balancing accuracy. On systems with many cores and low request rates, this can result in uneven load distribution.
+Proxies like [Envoy use per-thread](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/intro/threading_model#arch-overview-threading) views to avoid cross-thread contention. While this improves efficiency, it [reduces load balancing accuracy](https://www.envoyproxy.io/docs/envoy/latest/faq/load_balancing/concurrency_lb). On systems with many cores and low request rates, this can result in uneven load distribution.
 
 Per-thread views also complicate sharing health checks and feedback between threads, potentially increasing error rates.
 
-In contrast, HAProxy uses optimized data structures like `ebtree` to manage contention while maintaining a global view across threads, which improves load balancing precision.
+In contrast, HAProxy uses optimized data structures like `[ebtree](https://wtarreau.blogspot.com/2011/12/elastic-binary-trees-ebtree.html)` to [manage contention](https://wtarreau.blogspot.com/2018/02/progressive-locks-fast-upgradable.html) while maintaining a global view across threads, which improves load balancing precision.
 
 
 ## Common load balancing algoithims and challenges
