@@ -11,7 +11,7 @@ This post is part of a series.
 [Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.  
 [Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - The nuances of HTTP parsing and why it’s harder than it looks.   
 [Part 3]({{ "/reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - The intricacies of service discovery.  
-[Part 4]({{ "/reverseproxy/2025/08/08/Reverseproxy-Deep-Dive-Part4.html" | relative_url }}) -  Why Load Balancing at Scale is Hard.  
+[Part 4]({{ "/reverseproxy/2025/08/08/ReverseProxy-Deep-Dive-Part4.html" | relative_url }}) -  Why Load Balancing at Scale is Hard.  
 
 ---
 
@@ -185,6 +185,6 @@ This post is part of a series.
 [Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.  
 [Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - The nuances of HTTP parsing and why it’s harder than it looks.   
 [Part 3]({{ "/reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - The intricacies of service discovery.  
-[Part 4]({{ "/reverseproxy/2025/08/08/Reverseproxy-Deep-Dive-Part4.html" | relative_url }}) -  Why Load Balancing at Scale is Hard.  
+[Part 4]({{ "/reverseproxy/2025/08/08/ReverseProxy-Deep-Dive-Part4.html" | relative_url }}) -  Why Load Balancing at Scale is Hard.  
 
 ---
