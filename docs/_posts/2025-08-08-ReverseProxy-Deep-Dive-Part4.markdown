@@ -82,8 +82,8 @@ To mitigate this, proxies can incorporate additional algorithms and techniques s
 * **Slow start** to gradually ramp up traffic to new or recently recovered hosts, avoiding sudden overload
 * **Weighted load balancing** (e.g., weighted round robin or weighted least connections) to assign traffic proportionally, allowing smoother integration of hosts with lower initial capacity.
 
-#### Warm Up / Slow Start
-Many Java-based services or those using heavy caching need warm-up time before handling peak load. This period varies by request type and service behavior, making a universal solution difficult. A common approach is to gradually ramp up traffic to new hosts using heuristics.
+#### Warm Up / [Slow Start](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/slow_start)
+Many Java-based services or those using heavy caching need warm-up time before handling peak load. This period varies by request type and service behavior, making a universal solution difficult. A common approach is to [gradually ramp up](https://docs.haproxy.org/3.2/configuration.html#5.2-slowstart) traffic to new hosts using heuristics.
 
 
 #### How Long Can a Host Handle Reduced Traffic?
