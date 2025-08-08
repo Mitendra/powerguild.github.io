@@ -14,7 +14,6 @@ This post is part of a series.
 [Part 4]({{ "/reverseproxy/2025/08/08/Reverseproxy-Deep-Dive-Part4.html" | relative_url }}) -  Why Load Balancing at Scale is Hard.  
 
 ---
----
 
 ## Load Balancing
 One of the most critical roles for a reverse proxy is load balancing requests across different upstream hosts. From a list of upstream servers, the proxy must decide where each incoming request should go.
