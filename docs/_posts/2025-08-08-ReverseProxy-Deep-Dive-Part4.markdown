@@ -100,7 +100,7 @@ Many Java-based services or those using heavy caching need warm-up time before h
 In large-scale systems, proxy nodes operate independently, each with only a local view of the system. Their load balancing decisions are made in isolation, often without coordination or global state, which can lead to suboptimal traffic distribution and resource inefficiencies.
 
 * When a new host is added, all proxies see it with zero connections. Each proxy independently tries to send enough traffic to balance the load, often causing a flood of new requests and a traffic spike.
-* Similarly, when an upstream host degrades, each proxy detects it independently. This leads to slow convergence even when all requests to that host are failing. For example, if a proxy ejects a host after 3 failures, and you have 50 proxies, it may take 150 failed requests (or more) before the fleet stops sending traffic. This gets worse when the host is reintroduced after a fixed interval. If it's still bad, another 150 requests can get blackholed. Envoy's outlier detection works this way, and this method doesn't scale well with large fleets
+* Similarly, when an upstream host degrades, each proxy detects it independently. This leads to slow convergence even when all requests to that host are failing. For example, if a proxy ejects a host after 3 failures, and you have 50 proxies, it may take 150 failed requests (or more) before the fleet stops sending traffic. This gets worse when the host is reintroduced after a fixed interval. If it's still bad, another 150 requests can get blackholed. [Envoy's outlier detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier) works this way, and this method doesn't scale well with large fleets
 
 **Mitigations:**
 There are often complex mechanisms to handle these scenarios:
@@ -143,7 +143,7 @@ In this approach, each request is sent to the next host in line. It is simple an
 - **Unequal request types**  
    Not all requests are the same. Some are CPU-intensive, others take longer to process, and some are very lightweight. If traffic is distributed purely by request count, it can lead to imbalanced load—overloading some nodes while underutilizing others.
 
-Typically, load balancers implement a basic enhancement of [weighted round robin](https://how.dev/answers/what-is-the-weighted-round-robin-load-balancing-technique) to address the static nature of the original algorithm.
+Typically, load balancers implement a basic enhancement of [weighted round robin](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancers#weighted-round-robin) to address the static nature of the original algorithm.
 
 ### [Least Connections](https://www.digitalocean.com/community/tutorials/an-introduction-to-haproxy-and-load-balancing-concepts#leastconn)
 
