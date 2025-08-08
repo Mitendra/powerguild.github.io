@@ -178,6 +178,26 @@ Like other strategies, this approach does not solve the problem of cold starts. 
 - **Added complexity**
 The proxy must perform additional operations for random selection and comparison. However, the performance gain often justifies the cost.
 
+
+## Final Thoughts
+
+On paper, load balancing looks simple. Round robin feels like the obvious choice.
+In practice, creating an effective load balancing algorithm is hard and often relies on heuristics.
+Modern infrastructure, which is dynamic, elastic, and ephemeral, makes this even more challenging.
+
+A reverse proxy is expected to:
+
+- Keep up with a rapidly changing view of the system and track changes accurately
+- Balance load effectively while respecting the limitations of upstream servers
+- Anticipate failures and isolate their impact
+- Do all of this while consuming as few resources as possible
+
+All of this has to be done while operating with partial information, uneven data, and strict performance limits, conditions that turn load balancing into a surprisingly difficult problem.
+
+
+## What’s Next
+
+This series has been a long journey. The next post will be the last and will cover the remaining complexities, including connection pooling, TLS reuse, retry logic, and why this layer can often be a hidden source of bugs and latency.
 ---
 
 This post is part of a series. 
