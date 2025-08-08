@@ -197,7 +197,8 @@ All of this has to be done while operating with partial information, uneven data
 
 ## What’s Next
 
-This series has been a long journey. The next post will be the last and will cover the remaining complexities, including connection pooling, TLS reuse, retry logic, and why this layer can often be a hidden source of bugs and latency.
+This series has been a long journey. The next post will be the last and will cover the remaining complexities, including connection pooling, TLS reuse, retry logic, and why this layer can often be a hidden source of bugs and latency. 
+
 ---
 
 This post is part of a series. 
