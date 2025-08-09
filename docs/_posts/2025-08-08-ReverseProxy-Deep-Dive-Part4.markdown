@@ -128,8 +128,6 @@ In contrast, HAProxy uses optimized data structures like [ebtree](https://wtarre
 
 ### [Round-Robin](https://www.cloudns.net/blog/round-robin-load-balancing/)
 
-The proxy sends requests to the host with the fewest active connections. This accounts for variable load per request, such as long-lived versus short-lived calls.
-
 In this approach, each request is sent to the next host in line. It is simple and fair, but only if all hosts are healthy, fully warmed up, and equally performant.
 
 #### Challenges
