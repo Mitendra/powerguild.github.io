@@ -124,7 +124,7 @@ Per-thread views also complicate sharing health checks and feedback between thre
 In contrast, HAProxy uses optimized data structures like [ebtree](https://wtarreau.blogspot.com/2011/12/elastic-binary-trees-ebtree.html) to [manage contention](https://wtarreau.blogspot.com/2018/02/progressive-locks-fast-upgradable.html) while maintaining a global view across threads, which improves load balancing precision.
 
 
-## Common load balancing algoithims and challenges
+## Common Load Balancing Algorithms and Their Challenges
 
 ### [Round-Robin](https://www.cloudns.net/blog/round-robin-load-balancing/)
 
