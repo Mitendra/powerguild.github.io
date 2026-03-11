@@ -242,6 +242,35 @@
   }
 }
 
+.home-intro {
+  padding-bottom: $spacing-unit * 0.8;
+  margin-bottom: $spacing-unit * 0.8;
+  border-bottom: 1px solid $grey-color-light;
+
+  .home-tagline {
+    font-size: $small-font-size;
+    color: $grey-color;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: $spacing-unit * 0.3;
+  }
+
+  .home-desc {
+    font-family: $prose-font-family;
+    font-size: $base-font-size * 1.05;
+    color: $grey-color-dark;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+}
+
+html[data-theme="dark"] .home-intro {
+  border-bottom-color: #3f3f46;
+
+  .home-tagline { color: #71717a; }
+  .home-desc { color: #a1a1aa; }
+}
+
 .home-about {
   padding-bottom: $spacing-unit;
   margin-bottom: $spacing-unit;
@@ -328,16 +357,19 @@
   margin-bottom: $spacing-unit;
 }
 
-.post-content,
 .post-title,
 .post-meta {
   font-family: $base-font-family;
 }
 
+.post-content {
+  font-family: $prose-font-family;
+}
+
 .post-title {
-  @include relative-font-size(1.5);
+  @include relative-font-size(1.6);
   letter-spacing: -0.3px;
-  line-height: 1.3;
+  line-height: 1.25;
   font-weight: 600;
 }
 
@@ -422,38 +454,42 @@ html[data-theme="dark"] {
   margin-bottom: $spacing-unit;
 
   p {
-    line-height: 1.5;
-    margin-bottom: $spacing-unit * 0.35;
+    line-height: 1.7;
+    margin-bottom: $spacing-unit * 0.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $base-font-family;
   }
 
   // h1 used inside post body as a top-level section break
   h1 {
-    @include relative-font-size(1.3);
+    @include relative-font-size(1.25);
     font-weight: 600;
-    margin-top: $spacing-unit * 0.9;
-    margin-bottom: $spacing-unit * 0.35;
+    margin-top: $spacing-unit * 1.2;
+    margin-bottom: $spacing-unit * 0.4;
     letter-spacing: -0.2px;
   }
 
   h2 {
-    @include relative-font-size(1.15);
+    @include relative-font-size(1.1);
     font-weight: 600;
-    margin-top: $spacing-unit * 0.75;
-    margin-bottom: $spacing-unit * 0.3;
+    margin-top: $spacing-unit * 1.0;
+    margin-bottom: $spacing-unit * 0.35;
   }
 
   h3 {
     @include relative-font-size(0.95);
     font-weight: 600;
-    margin-top: $spacing-unit * 0.6;
-    margin-bottom: $spacing-unit * 0.2;
+    margin-top: $spacing-unit * 0.75;
+    margin-bottom: $spacing-unit * 0.25;
   }
 
   h4 {
     @include relative-font-size(0.875);
     font-weight: 600;
     color: $grey-color-dark;
-    margin-top: $spacing-unit * 0.45;
+    margin-top: $spacing-unit * 0.55;
     margin-bottom: $spacing-unit * 0.15;
   }
 
