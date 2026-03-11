@@ -2,31 +2,61 @@
  * Site header
  */
 .site-header {
-  border-top: 5px solid $grey-color-dark;
+  border-top: none;
   border-bottom: 1px solid $grey-color-light;
-  min-height: $spacing-unit * 1.865;
-
-  // Positioning context for the mobile navigation icon
   position: relative;
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
 }
 
 .site-title {
-  @include relative-font-size(1.625);
-  font-weight: 300;
-  line-height: $base-line-height * $base-font-size * 2.25;
-  letter-spacing: -1px;
+  @include relative-font-size(1.2);
+  font-weight: 600;
+  letter-spacing: -0.3px;
   margin-bottom: 0;
-  float: left;
+  line-height: 1;
 
   &,
   &:visited {
-    color: $grey-color-dark;
+    color: $text-color;
+  }
+}
+
+.header-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: $grey-color;
+  font-size: $small-font-size;
+  text-decoration: none;
+  margin-left: 18px;
+  border-bottom: 1px solid transparent;
+
+  &:visited {
+    color: $grey-color;
+  }
+
+  &:hover {
+    color: $text-color;
+    text-decoration: none;
+    border-bottom-color: $grey-color;
+  }
+
+  .svg-icon {
+    padding-right: 0;
   }
 }
 
 .site-nav {
-  float: right;
-  line-height: $base-line-height * $base-font-size * 2.25;
+  display: flex;
+  align-items: center;
+  line-height: 1;
 
   .nav-trigger {
       display: none;
@@ -108,6 +138,12 @@
 .site-footer {
   border-top: 1px solid $grey-color-light;
   padding: $spacing-unit 0;
+
+  .footer-copy {
+    font-size: $small-font-size;
+    color: $grey-color;
+    margin-bottom: 0;
+  }
 }
 
 .footer-heading {
@@ -188,23 +224,99 @@
   @include relative-font-size(1.75);
 }
 
-.post-list {
-  margin-left: 0;
-  list-style: none;
+.page-nav {
+  padding: 8px 0;
 
-  > li {
-    margin-bottom: $spacing-unit;
+  .page-nav-link {
+    font-size: $small-font-size;
+    color: $text-color;
+    text-decoration: none;
+    margin-right: 20px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid lighten($brand-color, 30%);
+
+    &:hover {
+      color: $brand-color;
+      border-bottom-color: $brand-color;
+    }
   }
 }
 
+.home-about {
+  padding-bottom: $spacing-unit;
+  margin-bottom: $spacing-unit;
+  border-bottom: 1px solid $grey-color-light;
+
+  p {
+    color: $grey-color;
+    font-size: $small-font-size;
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  a {
+    color: $grey-color;
+    text-decoration: underline;
+
+    &:hover {
+      color: $text-color;
+    }
+  }
+}
+
+.post-list {
+  margin-left: 0;
+  list-style: none;
+}
+
+.post-item {
+  margin-bottom: $spacing-unit * 0.6;
+  padding-bottom: $spacing-unit * 0.6;
+}
+
+.post-date {
+  display: block;
+  font-size: 0.72rem;
+  color: $grey-color;
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.post-item-title {
+  @include relative-font-size(1.2);
+  font-weight: 500;
+  line-height: 1.35;
+  margin-bottom: 8px;
+
+  a {
+    color: $text-color;
+    text-decoration: none;
+    border-bottom: 1px solid lighten($brand-color, 30%);
+    padding-bottom: 1px;
+
+    &:visited {
+      color: $text-color;
+    }
+
+    &:hover {
+      color: $brand-color;
+      border-bottom-color: $brand-color;
+    }
+  }
+}
+
+.post-excerpt {
+  font-size: $small-font-size;
+  color: $grey-color;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+// Keep post-meta for use on post pages
 .post-meta {
   font-size: $small-font-size;
   color: $grey-color;
-}
-
-.post-link {
-  display: block;
-  @include relative-font-size(1.5);
 }
 
 

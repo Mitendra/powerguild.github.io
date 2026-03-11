@@ -2,7 +2,8 @@
 layout: post
 title:  "Reverse Proxy Deep Dive (Part 4):  Why Load Balancing at Scale is Hard"
 date:   2025-08-08 08:43:56 -0800
-categories:  ReverseProxy
+categories: ReverseProxy
+excerpt: "Round-robin works fine at small scale, but at large scale load balancing becomes far more complex. Not all requests are equal, servers have varying capacity, and health signals can be misleading — this post explores what makes truly effective load balancing so difficult."
 ---
 ---
 

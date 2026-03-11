@@ -2,7 +2,8 @@
 layout: post
 title:  "Reverse Proxy Deep Dive (Part 3): The Hidden Complexity of Service Discovery"
 date:   2025-07-26 08:43:56 -0800
-categories:  ReverseProxy
+categories: ReverseProxy
+excerpt: "Service discovery sounds simple — keep an up-to-date list of healthy upstream hosts. But doing it accurately across thousands of services, with fast failure detection and minimal overhead, is one of the hardest problems a proxy has to solve."
 ---
 ---
 

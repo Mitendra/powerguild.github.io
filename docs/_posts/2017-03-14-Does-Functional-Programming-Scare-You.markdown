@@ -3,6 +3,7 @@ layout: post
 title:  "Does Functional Programming scare you?"
 date:   2017-03-14 08:43:56 -0800
 categories: medium blogs
+excerpt: "Functional programming has compelling features — statelessness, composability, tail recursion — but the jargon and paradigm shift put many developers off. This series revisits familiar concepts and explores how they evolve under the functional paradigm."
 --- 
 
 Functional programming has been on rise of late. Boasting on so many amazing features in functional programming, a plethora of new set of functional programming languages have come to existence. All these newer languages have been trying to reduce the friction a programmer faces while trying to move to functional programming. With its unique set of features, many of them target a specific audience, e.g. Scala has been targeting Java and object oriented community by providing a unique combination of functional and object oriented philosophy on JVM. Elixir has been targeting Ruby community with its unique features of ruby like syntax and actor model based inter process communication built on top of Erlang VM and so on. There are many more languages and they provide some or the other features which seem difficult to resist.

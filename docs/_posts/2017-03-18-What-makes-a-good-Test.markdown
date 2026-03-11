@@ -3,6 +3,7 @@ layout: post
 title:  "What makes a good test?"
 date:   2017-03-18 08:43:56 -0800
 categories: medium blogs
+excerpt: "Not all tests are equal — many that pass don't actually prove the system is healthy, and failing tests don't always mean something is broken. Here are the properties that separate good tests from ones that slowly become noise."
 --- 
   
 ![](/assets/images/laptiop_open.png)  

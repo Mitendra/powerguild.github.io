@@ -3,7 +3,7 @@ layout: post
 title:  "HAproxy and Couchbase Integration"
 date:   2024-06-08 08:00:56 -0800
 categories: ReverseProxy
-
+excerpt: "There's no out-of-the-box solution for connecting HAProxy directly to Couchbase for key-value lookups. This post walks through a Lua integration that implements the Couchbase memcached binary protocol inside HAProxy, eliminating the need for a sidecar."
 ---  
 # Introduction
 

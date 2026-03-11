@@ -3,7 +3,7 @@ layout: post
 title:  "Thoughts on gRPC"
 date:   2018-06-06 08:43:56 -0800
 categories: medium blogs
-
+excerpt: "gRPC and HTTP/2 promise faster, more efficient inter-service communication — but they aren't magic bullets. A look at the real benefits of protobuf and multiplexing, and the overlooked pitfalls that matter before you commit to gRPC in production."
 ---  
   
 ![](/assets/images/light_bulb.png)  

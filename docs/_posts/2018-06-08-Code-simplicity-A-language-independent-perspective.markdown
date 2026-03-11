@@ -3,7 +3,7 @@ layout: post
 title:  "Code simplicity: A language independent perspective"
 date:   2018-06-08 08:43:56 -0800
 categories: medium blogs
-
+excerpt: "Switching languages rarely solves the underlying problem. Writing simple code is harder than it sounds — this post explores what actually makes code readable and maintainable: clear naming, minimal state, and avoiding cleverness at the cost of intent."
 ---  
   
 ![](/assets/images/straight_line.png)  

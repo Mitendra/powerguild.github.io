@@ -3,7 +3,7 @@ layout: post
 title:  "Reverse Proxy Deep Dive (Part 1): The Complexity of Connection Handling"
 date:   2024-01-15 08:43:56 -0800
 categories: ReverseProxy
-
+excerpt: "Reverse proxies look simple from the outside — accept a request, forward it, return the response. But connection handling at scale involves a maze of timeouts, keep-alive semantics, protocol versions, and failure modes that reveal just how complex this layer really is."
 ---
 ---
 

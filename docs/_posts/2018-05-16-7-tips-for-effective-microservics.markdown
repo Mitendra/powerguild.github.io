@@ -3,6 +3,7 @@ layout: post
 title:  "7 tips for effective microservices"
 date:   2018-05-16 08:43:56 -0800
 categories: medium blogs
+excerpt: "Well-designed microservices make development faster and deployments simpler, but getting there requires discipline. Seven practical tips — from correlation IDs to idempotency to interface contracts — that make a real difference at scale."
 --- 
 
 ![](/assets/images/seven-lemons.png)  

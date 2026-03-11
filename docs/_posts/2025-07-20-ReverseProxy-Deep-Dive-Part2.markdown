@@ -2,7 +2,8 @@
 layout: post
 title:  "Reverse Proxy Deep Dive (Part 2): Why HTTP Parsing at the Edge Is Harder Than It Looks"
 date:   2025-07-20 08:43:56 -0800
-categories: ReverseProxy   
+categories: ReverseProxy
+excerpt: "HTTP parsing sounds straightforward until you account for decades of protocol evolution, browser quirks, malformed requests, and smuggling attacks. Getting HTTP right at the edge is one of the hardest — and most security-critical — problems in proxy development."
 ---
 ---
 

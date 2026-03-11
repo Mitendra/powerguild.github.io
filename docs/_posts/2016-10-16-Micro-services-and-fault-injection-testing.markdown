@@ -3,7 +3,7 @@ layout: post
 title:  "Micro services and Fault injection testing"
 date:   2016-10-16 08:43:56 -0800
 categories: medium blogs
-
+excerpt: "Microservices promised faster delivery and higher availability, but testing them is harder than it looks. Environment setup, transitive dependencies, and resiliency testing at scale are challenges that keep most teams from realizing the full promise of microservices."
 ---  
   
 With the evolution of micro services, software development world has changed for ever. With a smaller code to maintain, clearer contract to follow and ability to push the components to production independently, developers' life has become much easier.
