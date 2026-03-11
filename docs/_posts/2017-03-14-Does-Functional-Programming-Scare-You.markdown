@@ -22,8 +22,8 @@ In this series of blog posts, we will try to revisit some of the basic concepts 
   
 Here we go:
   
-**Recursion**  
-  
+## Recursion
+
 There are problems where recursion is a very natural choice E.g. Fibonacci series problem or a problem involving tree traversal. The very definition of Fibonacci number, suggests a recursive solution  
  
 {% highlight shell %}
@@ -34,11 +34,11 @@ Same goes with Tree traversal.
   
 Almost every time you write a code using recursion in any moderately big project(in non functional language) you will be asked to revisit your code and write an equivalent iterative code. I, myself, have been asked couple of times. although many times it can be done very easily but sometimes an iterative solution may not be as simple as the recursive solution.  
   
-**Why is recursion dreaded in imperative programming?**  
+### Why is recursion dreaded in imperative programming?  
   
 Whenever you call a function(and it does include calling itself) the return address and the arguments are pushed onto the call stack. The stack is finite, so if the recursion is too deep you’ll eventually run out of stack space. when your input is a variable and you don’t have control on it, typically you don’t want to take a chance.  
   
-**Do functional languages handle it differently?**  
+### Do functional languages handle it differently?  
   
 Won’t it be nice if the compiler somehow figures out to optimize the space required and we can write recursive code more often if it’s a natural fit?  
   
@@ -65,7 +65,7 @@ Have you tried writing a quick sort in iterative fashion? Now try the same with 
 
 > **Recursion is at the heart of functional programming, so better be well versed with it.**  
 
-**Array vs List**  
+## Array vs List  
 
 What’s the basic data structure C++ or Java provide? 
 
@@ -104,7 +104,7 @@ return a + b;
 console.log(sum); // 6
 {% endhighlight %} 
 
-**What about other common operations in array/list?**  
+### What about other common operations in array/list?  
   
 You might have observed, there are few operations that we do very frequently on an array/list e.g. selecting a subset of elements matching specific criteria, creating a new array out of original array by doing some standard operation on it e.g. Removing a new line characters from all the links read from a file, accumulating the result after applying some standard operation on each element e.g. Sum of the square of all the numbers or so on.  
   
@@ -112,6 +112,6 @@ These are so common that most of the languages provide a shortcut for doing this
   
 > Map, Reduce, Filter, Fold etc are some common constructs provided in functional languages that greatly reduce the necessity of a loop construct.  
   
-**Pipeline, higher order functions, currying and more**  
+## Pipeline, higher order functions, currying and more  
   
 So far we have covered only few of the trivial but fundamental concepts that will help us understand the Functional paradigm. I’ll cover many of the remaining concepts in the upcoming posts. Please stay tuned for part II.

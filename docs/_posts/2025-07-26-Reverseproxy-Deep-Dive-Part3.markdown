@@ -92,24 +92,24 @@ Another key concept in DNS based system is DNS [Time To Live](https://datatracke
 
 DNS TTL determines how long the proxy should treat the resolved host list as fresh.
 
-##### **High TTL**
-- Fewer DNS lookups  
-- Lower CPU and memory overhead in the proxy  
-- Less churn in connection pools  
+#### High TTL
+- Fewer DNS lookups
+- Lower CPU and memory overhead in the proxy
+- Less churn in connection pools
 
 But:
-- Hosts may go down, drain, or be replaced without the proxy knowing  
-- Traffic may continue flowing to broken nodes  
+- Hosts may go down, drain, or be replaced without the proxy knowing
+- Traffic may continue flowing to broken nodes
 
-##### **Low TTL**
-- More up-to-date host list  
-- Dead hosts removed faster  
+#### Low TTL
+- More up-to-date host list
+- Dead hosts removed faster
 
 But:
-- High cost from frequent DNS queries, parsing, and memory updates  
-- Adds latency, especially with large upstream lists  
+- High cost from frequent DNS queries, parsing, and memory updates
+- Adds latency, especially with large upstream lists
 
-##### **Hybrid Approach**
+#### Hybrid Approach
 Use DNS for discovery combined with health-checks to prune bad hosts locally.
 
 - On each DNS update, fetch the full list  

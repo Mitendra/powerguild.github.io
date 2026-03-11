@@ -5,13 +5,13 @@ date:   2024-06-08 08:00:56 -0800
 categories: ReverseProxy
 excerpt: "There's no out-of-the-box solution for connecting HAProxy directly to Couchbase for key-value lookups. This post walks through a Lua integration that implements the Couchbase memcached binary protocol inside HAProxy, eliminating the need for a sidecar."
 ---  
-# Introduction
+## Introduction
 
 Couchbase is a popular distributed NoSQL database frequently used for low-latency, high-throughput, consistent key-value data store in large-scale distributed systems.
 
 Currently, there is no open-source solution available for connecting to Couchbase from HAProxy directly. This blog post will explore how we can integrate with Couchbase for key-value use cases.
 
-# Options for HAProxy integration
+## Options for HAProxy integration
 1. SPOE: HAProxy has this protocol built in to offload some parts of request handling to an external agent. As part of the request processing, we can send the required details to a sidecar (SPOE), pause the current transaction, and once the response is available, we can continue with processing the request. This SPOE agent can communicate with Couchbase and send the response back to HAProxy. More details on SPOE can be found [here](https://github.com/haproxy/haproxy/blob/master/doc/SPOE.txt). While this is a fairly good way to integrate with Couchbase, if we need to get some Couchbase data on each request (e.g., validating login information against Couchbase), performance and reliability can suffer.
       
 2. Lua integration: This will be the focus of this blog. If we could integrate Couchbase directly from HAProxy: 
@@ -19,16 +19,16 @@ Currently, there is no open-source solution available for connecting to Couchbas
    a. It would save an additional hop to the sidecar.  
    b. Key dependency on an external process would be removed.  
 
-# Lua integration with HAProxy:
+## Lua integration with HAProxy
 
-## Current state
+### Current state
 There are no existing options for direct integration with Couchbase (CB) in HAProxy. While CB provides REST APIs for management and query purposes, it does not offer an HTTP API for key-value (K/V) operations. SDKs are available in languages such as Go, C++, and Java, but there is no Lua SDK available. Although there are a few open-source options to connect to CB using Lua for Nginx, none exist for HAProxy.
 
 Nginx/openresty only supports LuaJIT, which is limited to Lua 5.1/5.2. Many new features introduced in Lua 5.3 and later are not available in LuaJIT.
 
 Moreover, the current implementations in those libraries do not seem to support mTLS-based authentication.
 
-## High-Level Overview of Couchbase (CB)
+### High-Level Overview of Couchbase (CB)
 
 1. CB is cluster-aware and shards data across different nodes. For easy scaling and management, it uses buckets and virtual buckets instead of mapping keys directly to hosts.
 2. Buckets are logical groupings of data that can be used for access control, among other things.
@@ -36,7 +36,7 @@ Moreover, the current implementations in those libraries do not seem to support 
 4. To access a key, we need to find the virtual bucket and the corresponding node.
 5. The virtual bucket-to-node mapping is not static and can change based on the number of nodes in the cluster.
 
-## Simplified K/V Memcached Protocol
+### Simplified K/V Memcached Protocol
 ![](/assets/images/cb_request_response.jpeg)  
 1. A stateful TCP protocol. Commnads need to run in a speceific sequence/context.
 2. A basic CB request consists of:
@@ -72,7 +72,7 @@ local function _encode_request_pack(opCode, key, vBucketId, uuid)
 end
 ```  
   
-## High-Level Overview of the CB flow
+### High-Level Overview of the CB flow
 
 1. Use an SRV DNS query to find the host/port for Couchbase over the Memcached protocol. Pick the scheme as couchbases (s for secure).
 ```shell
@@ -138,7 +138,7 @@ end
    1. Get the server index for this bucket from the bucket-to-server map obtained in step 3.
    2. Use this index and the data from step 3.1 to get the target host.
 
-## Get Key Command
+### Get Key Command
 1. Connect to the target host if not already connected.
 2. Set the bucket context by executing the Select Bucket command.
 3. Execute the GetKey command.
@@ -173,12 +173,12 @@ local function get_cb_key(key)
 end
 ```  
   
-## What Happens When a Server Node Changes
+### What Happens When a Server Node Changes
 1. If a new node is added or removed, the bucket may be offloaded to a different host and the bucket-to-host mapping will change.
 2. If a request is sent to a host that no longer has the corresponding bucket (key), the response will indicate that the host doesn’t have the bucket.
 3. Such a response means we need to get the latest configuration by querying the Get Cluster Config.
 
-## Pipelining
+### Pipelining
 1. The CB GetKey command is context-aware, requiring the correct bucket context be set before execution.
 2. CB authentication can be granular, allowing access to specific buckets. If you use a client certificate during the TCP connect, you may have access to only a specific set of buckets during the whole session.
 3. The cost of opening an SSL connection is very high, much higher than serving a GetKey request.
@@ -186,7 +186,7 @@ end
 5. For pipelining, the order of responses will still be the same as the order of requests.
 6. To make it easier for the client, the protocol supports opaque data, which the server returns as is in the response. This allows the client to match the response to the correct request.
 
-## HAProxy Integration Highlights
+### HAProxy Integration Highlights
 1. mTLS support is not enabled in HAProxy Lua TCP socket. A hack to enable it is available [here](https://github.com/Mitendra/haproxy-lua-couchbase?tab=readme-ov-file#haproxy-lua-socket-patch-for-mtls), but a better fix is needed.
 2. DNS support is not enabled in Lua. HttpClient has DNS resolution options, but they don’t apply to TCP sockets. The do-resolve action is present, but interaction between Lua and HTTP actions is not documented. Attempts to use it did not work.
 3. Since DNS can happen over TCP, we can build a simple, limited-scope DNS solution to handle specific use cases.
@@ -198,20 +198,20 @@ end
     d. Read the response and share it with the paused transactions. We are not aware of a way to enable the transaction when some other action is triggered in Lua (other than IO). A workaround is to periodically wake up, try to read the data from the shared source, and if not found, pause again.
 6. TCP timeouts: core.tcp only supports overall timeouts and doesn’t have individual read/write/idle timeouts. If we set the timeout very high, a connection error takes a very long time; if we set it low, the TCP connection gets closed frequently and new connections need to be opened periodically.
 
-## Testing
+### Testing
 1. Most of the lua code do not really depend on the HAProxy, so we should be able to test that independently.
 2. We can use some way to switch between the HAProxy TCP socket and LuaSocket. An environment variable can control this behavior
 3. We can capture the request/response from Couchbase once and reuse them for testing the client and server.
 4. DNS resolution is an important step, and actual CB data will contain hostnames. To make it easier, we can use dnsmasq to point to localhost. This enables end-to-end testing without depending on the actual server.
 
-## Load Testing
+### Load Testing
 1. While basic testing can be done against the actual CB server, doing load testing against a production or staging CB server may impact other users. 
 2. Since we already understand the basics of the CB Memcached protocol, we can use it to build a mock test CB server as well.
 3. For testing, we can ignore the mTLS part.
 4. For high-volume tests, we’ll need multiple connections to be open to the server. A simple native lua cb server wont work here if it's single threaded. 
 5. We can leverage HAProxy itself to provide multithreaded eventloop and use it as a CB server to test end-to-end behavior locally.
 
-# Conclusion
+## Conclusion
 We are able to build a primitive lua couchbase integration. You can find the complete code with example [here](https://github.com/Mitendra/haproxy-lua-couchbase)
 
 

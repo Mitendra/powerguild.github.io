@@ -61,7 +61,7 @@ Breaking down the workflow reveals several essential functionalities:
 
 Each of these steps is complex, and a deeper dive into each is warranted.
 
-# Deep Dive into Connection Management
+## Deep Dive into Connection Management
 
 On a high level, the proxy needs to bind to a specific port, listen on it, wait for data, read/process received data, forward data to the origin, receive data from the origin, and write it back to the connection for clients to read the response. This process continues in a loop.
 

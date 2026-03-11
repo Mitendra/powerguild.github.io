@@ -12,13 +12,13 @@ Simple is beautiful is the golden mantra in programming. While efficiency and pe
   
 Many such decisions work really well for some teams, and many of them fail to change the ground realities. Let’s explore, what makes a code simple and what we can do in that regard.  
   
-### What makes the code simple  
+## What makes the code simple  
   
 Ironically, writing simple code is neither easy nor simple and, at times, it may actually be quite complex to simplify a logic or a piece of code.  
   
 A few signs of simple and easy writing:  
   
-#### Easy to read and comprehend  
+### Easy to read and comprehend  
 Typically the code is written once and read hundreds of time over a period of time. So, it’s important that this should be easy to read and comprehend. 
    
 Some simple tips that can help:  
@@ -32,7 +32,7 @@ Some simple tips that can help:
    
 5. Avoid magical logic : Efficiency at the cost of readability should be avoided. e.g. X << 3(left shift a number X by 3) instead of X * 8(multiplying X by 8) may be faster but may not have the same amount of readability. Avoiding such stuff typically helps in readability unless the intent is to the same.  
      
-#### Easy to comprehend the code/implementation context
+### Easy to comprehend the code/implementation context
 Very often people move around and new folks have to look at the code and they may not have the same level of exposure and context of the problem being solved. So, the easier it’s to get the context from the code, the more productive new folks can be. Few things can help:  
   
 1. Less state and dependency among methods: methods which are dependent on other methods for state or need to be called in a certain sequences make it harder to read and modify.We have to not only read and understand the current method but also need to understand the sequence of calls. Often this leads to calling a method where the current state is not properly updated, resulting into issues. Do not use member variables in classes to store temporary state to avoid extra arguments in private methods.  
@@ -119,10 +119,10 @@ class URLHelper
 end
 {% endhighlight %}
 
-#### Easy to get the intent and the problem context  
+### Easy to get the intent and the problem context
 when it’s time to modify the existing code, the context of the problem and the intent help more than the implementation steps. So a meaningful abstraction is important.  
    
-**Meaningful abstractions**  
+#### Meaningful abstractions
      
 We can write a very specific code that works perfectly fine for a context but may hide the intent.  
 e.g. Lets say, we are building an e-commerce site and once the checkout is complete, we need to send an email to indicate checkout is complete and if there are errors we may need to send a different email. Assume there are 2 steps before checkout is considered completed and we can have scenarios where after 1st step, the system errors out. Also assume we record success of each step as a row in DB(in memory or actual DB).  
@@ -163,5 +163,5 @@ def isCheckoutCompleted(checkoutDetails)
 end
 {% endhighlight %}
 
-### Simple is beautiful
+## Simple is beautiful
 At the end what matters is to convey the right context and meaning. A code which is simple to read and scan through but not revealing the right intent may not be treated as simple. While languages and its feature may play an important role, if we take care of these basic things, chances are our code will still be beautiful, irrespective of what language, what paradigm or what features of a language we are using.  

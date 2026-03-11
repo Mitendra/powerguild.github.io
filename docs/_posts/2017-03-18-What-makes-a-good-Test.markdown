@@ -12,7 +12,7 @@ Test cases are meant to check the health of the system and find issues if certai
   
 So the question arises, what makes a test good or bad. Lets look at some of the signs of a good test:  
   
-## A good test is deterministic in nature**  
+## A good test is deterministic in nature  
   
 Success or failure of a test case should be able to tell whether a system or part of the system is good or bad with confidence. But isn’t this very obvious? Actually it is, but writing a test which is deterministic is not always easy.  
   

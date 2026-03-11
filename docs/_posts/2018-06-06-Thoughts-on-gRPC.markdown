@@ -10,7 +10,7 @@ excerpt: "gRPC and HTTP/2 promise faster, more efficient inter-service communica
   
 Go and gRPC have become a popular choice for microservices of late. gRPC is an efficient over the wire communication protocol. Built on top of http/2 and protobuf (in theory other serialization protocols can also be supported), this is supposed to be faster, with lesser network overhead and an efficient protocol.  
   
-### What is http/2
+## What is http/2
   
 Http 2 is the next version of http protocol(http 1.1 is the most commonly used current version). Few points to note about http 2.0  
   
@@ -21,18 +21,18 @@ Http 2 is the next version of http protocol(http 1.1 is the most commonly used c
     
 If http 2.0 is so good, why does everyone not use it?  
   
-### Pitfalls  
+## Pitfalls  
   
 1. Mostly for web use cases. The RFC talks about this, core focus is on browser use cases. Although can be used for non browser scenarios as well.  
 2. Multiplexing actually adds overhead if there is a single request response involved. In case of proxy or dns based round robin scenarios, each request may be routed to a different downstream and multiplexing doesn’t work very well. Multiple simultaneous downstream call to the same service within the same request context is also less likely. So multiplexing may not be efficient in such scenarios.  
 3. Number of headers in non browser use cases are typically limited. Larger header size could mostly be attributed to cookies in browser use cases. With smaller number of headers, compression gain is not that significant.  
 4. A compressed and binary header also means inspection becomes difficult and an upgrade of tool sets is required.  
      
-### What is protobuf  
+## What is protobuf  
   
 Protobuf is a messaging protocol for over the wire communication. Being a binary transfer protocol, it packs the data in a compact format for efficient and faster data transfer. The client library to work with protobuf is available in several languages. Golang has a native support of protobuf.  
   
-### A brief history of serialization protocols  
+## A brief history of serialization protocols  
   
 Long back, XML was kind of default serialization format and increasing popularity of Java could be attributed to its rise.  
 
@@ -48,13 +48,13 @@ For a more efficient packing of data, the need of better options arose. Focused 
   
 Protobuff is one such option. It was developed within Google and later opensourced. Thrift is another which was developed by Facebook and later opensourced.  
   
-### Few questions to ask  
+## Few questions to ask  
   
 1. Does the protocol have library support for the language we are interested in(consider both client and server languages)  
 2. Does it have the tooling for manual request response from command line if the need arises(mostly for debugging and testing)  
 3. Will the users of the API be comfortable using it? Browsers, generally, have good support for json/xml as they handle gzip. Similarly other popular tools like curl, postman supports json/xml and yet need a good support of gRPC.  
    
-**References:**  
+## References  
   
 [NGINX HTTP2 White Paper](https://cdn-1.wp.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf)  
 [HTTP/2 Frequently Asked Questions](https://http2.github.io/faq/)  
