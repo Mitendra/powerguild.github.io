@@ -2,7 +2,7 @@
 layout: post
 title:  "Does Functional Programming scare you?"
 date:   2017-03-14 08:43:56 -0800
-categories: medium blogs
+tags: [Programming]
 excerpt: "Functional programming has compelling features — statelessness, composability, tail recursion — but the jargon and paradigm shift put many developers off. This series revisits familiar concepts and explores how they evolve under the functional paradigm."
 --- 
 

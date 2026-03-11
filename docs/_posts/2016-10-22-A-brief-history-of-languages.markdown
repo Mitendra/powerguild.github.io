@@ -2,7 +2,7 @@
 layout: post
 title:  "A brief history of languages"
 date:   2016-10-22 08:43:56 -0800
-categories: medium blogs
+tags: [Programming]
 excerpt: "Why does a new programming language appear every few months when we already have so many? A conversation tracing the journey from C++ to Java to Scala — each shift driven by promises, broken ones too, and the endless search for the right tool."
 --- 
   

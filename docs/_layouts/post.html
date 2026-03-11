@@ -13,9 +13,9 @@ layout: default
         {{ page.date | date: date_format }}
       </time>
       · {{ read_time }} min read
-      {%- if page.categories.size > 0 -%}
-        · <span class="post-category-label">{{ page.categories | first }}</span>
-      {%- endif -%}
+      {%- for tag in page.tags -%}
+        <span class="post-category-label">{{ tag }}</span>
+      {%- endfor -%}
     </p>
   </header>
 

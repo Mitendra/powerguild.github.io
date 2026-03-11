@@ -2,7 +2,7 @@
 layout: post
 title:  "Scaling Selenium with Openresty"
 date:   2018-12-12 08:43:56 -0800
-categories: medium blogs
+tags: [Infrastructure, Scalability]
 excerpt: "Selenium Grid scales browser nodes easily, but scaling the hub itself is a different problem. This post covers how we used OpenResty and Lua to build session-aware load balancing on top of Selenium, enabling true high availability for UI test infrastructure."
 ---  
   

@@ -2,7 +2,7 @@
 layout: post
 title:  "From startup to web scale: A gentle introduction to scaling"
 date:   2018-06-19 08:43:56 -0800
-categories: medium blogs
+tags: [Scalability, "Distributed Systems"]
 excerpt: "A web service starts with a single box and a handful of users, then it grows. This post traces the journey from a naive startup setup through logging, redundancy, caching, and sharding — a gentle introduction to scaling challenges every growing system faces."
 ---  
   
