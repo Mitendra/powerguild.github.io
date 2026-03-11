@@ -4,7 +4,10 @@
 .site-header {
   border-top: none;
   border-bottom: 1px solid $grey-color-light;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $background-color;
 
   .wrapper {
     display: flex;
@@ -303,6 +306,12 @@ html[data-theme="dark"] .home-intro {
   margin-bottom: $spacing-unit * 0.5;
   border: 1px solid $grey-color-light;
   border-radius: 8px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    border-color: lighten($brand-color, 20%);
+    background-color: #f8f9ff;
+  }
 }
 
 .post-item-meta {
@@ -456,13 +465,13 @@ html[data-theme="dark"] {
     .theme-icon-moon { display: none; }
   }
 
-  .site-header { border-bottom-color: #3f3f46; }
+  .site-header { border-bottom-color: #3f3f46; background-color: #18181b; }
   .site-title { color: #f4f4f5; &:visited { color: #f4f4f5; } }
   .header-social-link { color: #a1a1aa; &:visited { color: #a1a1aa; } &:hover { color: #f4f4f5; border-bottom-color: #71717a; } }
 
   .page-nav-link { color: #d4d4d8; border-bottom-color: #3f3f46; &:hover { color: #60a5fa; border-bottom-color: #60a5fa; } }
 
-  .post-item { border-color: #3f3f46; }
+  .post-item { border-color: #3f3f46; &:hover { border-color: #60a5fa; background-color: #1e2433; } }
   .post-date { color: #71717a; }
   .post-read-time { color: #71717a; }
   .post-category-label { color: #60a5fa; border-color: #3f3f46; }
