@@ -4,21 +4,12 @@ title: About
 permalink: /about/
 ---
 
-Welcome to Mitendra's corner of the internet, where software engineering meets a passion for unraveling the complexities of distributed systems. As a seasoned software engineer, I am on a mission to make the intricate world of distributed systems more accessible. My blog is a chronicle of lessons learned, insights gained, and a continuous exploration of how to simplify the complex.
+<div class="about-profile">
+  <img src="/assets/images/avatar.jpg" alt="Mitendra Mahto" class="about-avatar" />
+</div>
 
-### Key Themes:
+I'm Mitendra — a software engineer who has spent the last decade building and scaling distributed systems.
 
-#### Distributed Systems Unveiled  
-Dive into the realm of distributed systems with me as I demystify intricate concepts, discussing challenges, and presenting solutions.  
-  
-#### Simplifying Complexity  
-Discover my strategies for simplifying complex problems, exploring tools, and methodologies that make software engineering tasks more manageable.    
-  
-#### Decoding Complexity  
-Gain insights into the factors that contribute to software system complexity, from code intricacies to architectural challenges within distributed systems.    
-  
-#### Learning Principles  
-Explore overarching principles of continuous learning, adaptation, and growth in the ever-evolving landscape of software engineering.  
-   
-   
-Thank you for stopping by, and I hope you find inspiration and practical insights that resonate with your own software engineering journey.
+I write about the hard parts: connection management, service discovery, load balancing, testing at scale, and the gap between how systems are supposed to work and how they actually behave in production. Most posts come from real problems I've run into and had to think through carefully.
+
+Outside of work, I'm curious about how complex things are built — from software to cities.

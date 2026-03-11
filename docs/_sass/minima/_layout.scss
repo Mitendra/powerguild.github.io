@@ -341,6 +341,20 @@
   font-weight: 600;
 }
 
+.about-profile {
+  margin-bottom: $spacing-unit * 0.8;
+}
+
+.about-avatar {
+  width: 120px !important;
+  height: 120px !important;
+  max-width: 120px !important;
+  max-height: 120px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
 .post-content {
   margin-bottom: $spacing-unit;
 
