@@ -196,15 +196,17 @@ All of this has to be done while operating with partial information, uneven data
 
 ## What’s Next
 
-This series has been a long journey. The next post will be the last and will cover the remaining complexities, including connection pooling, TLS reuse, retry logic, and why this layer can often be a hidden source of bugs and latency. 
+This series has been a long journey. The next post will be the last and will cover the remaining complexities, including connection pooling, TLS reuse, retry logic, and why this layer can often be a hidden source of bugs and latency.
 
 ---
 
-This post is part of a series. 
+This post is part of a series.
 
-[Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.  
-[Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - The nuances of HTTP parsing and why it’s harder than it looks.   
-[Part 3]({{ "/reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - The intricacies of service discovery.  
-[Part 4]({{ "/reverseproxy/2025/08/08/ReverseProxy-Deep-Dive-Part4.html" | relative_url }}) -  Why Load Balancing at Scale is Hard.  
+- [Part 1]({{ "/reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html" | relative_url }}) - A deep dive into connection management challenges.
+- [Part 2]({{ "/reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html" | relative_url }}) - The nuances of HTTP parsing and why it’s harder than it looks.
+- [Part 3]({{ "/reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html" | relative_url }}) - The intricacies of service discovery.
+- [Part 4]({{ "/reverseproxy/2025/08/08/ReverseProxy-Deep-Dive-Part4.html" | relative_url }}) - Why Load Balancing at Scale is Hard.
 
 ---
+
+*[Discuss this post on Hacker News](https://news.ycombinator.com/item?id=44864212)*

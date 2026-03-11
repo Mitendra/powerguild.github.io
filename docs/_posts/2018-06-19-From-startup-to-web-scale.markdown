@@ -145,4 +145,6 @@ If you need further scale, probably a split of your company may be the next opti
 [Microservices need to honor contracts](https://www.infoworld.com/article/3198149/microservices-need-to-honor-contracts.html)  
 [Microservices: Handling eventual consistency](https://softwareengineering.stackexchange.com/questions/354911/microservices-handling-eventual-consistency)  
 [Eventual consistency](https://en.wikipedia.org/wiki/Eventual_consistency)  
-[Database sharding explained in plain English](https://www.citusdata.com/blog/2018/01/10/sharding-in-plain-english)  
+[Database sharding explained in plain English](https://www.citusdata.com/blog/2018/01/10/sharding-in-plain-english)
+
+*[Discuss this post on Hacker News](https://news.ycombinator.com/item?id=17381947)*

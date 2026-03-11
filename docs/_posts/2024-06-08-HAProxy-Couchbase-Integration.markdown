@@ -214,6 +214,8 @@ end
 ## Conclusion
 We are able to build a primitive lua couchbase integration. You can find the complete code with example [here](https://github.com/Mitendra/haproxy-lua-couchbase)
 
+*[Discuss this post on Hacker News](https://news.ycombinator.com/item?id=44482907)*
+
 
 
 
