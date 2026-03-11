@@ -1,15 +1,30 @@
 ---
 layout: page
-title: About
+title: About me
 permalink: /about/
 ---
 
-<div class="about-profile">
+<div class="about-intro">
+  <div class="about-intro-text">
+    <p>Welcome to my corner of the internet. I'm Mitendra, a software engineer interested in understanding complexity in software systems, especially distributed systems. Large systems often appear chaotic at first, but with the right perspective they tend to reveal patterns.</p>
+  </div>
   <img src="/assets/images/avatar.jpg" alt="Mitendra Mahto" class="about-avatar" />
 </div>
 
-I'm Mitendra — a software engineer who has spent the last decade building and scaling distributed systems.
+This blog is where I explore those patterns and document lessons from building and operating large-scale systems. My goal is to understand what makes systems complex and how the right abstractions and design choices can make them simpler and more reliable.
 
-I write about the hard parts: connection management, service discovery, load balancing, testing at scale, and the gap between how systems are supposed to work and how they actually behave in production. Most posts come from real problems I've run into and had to think through carefully.
+I currently work on infrastructure and data systems, focusing on building and operating large-scale distributed platforms. Earlier in my career, I also worked on payment systems, where reliability and correctness are critical.
 
-Outside of work, I'm curious about how complex things are built — from software to cities.
+If you're curious about how complex systems work and how they can be made simpler, you'll likely find something interesting here.
+
+---
+
+## How this blog is built
+
+This site is built with [Jekyll](https://jekyllrb.com/), a Ruby-based static site generator. I still have a soft spot for Ruby, even though I don't get to use it much at work. Posts are plain Markdown files, no database, no server-side rendering.
+
+The site is hosted on [GitHub Pages](https://pages.github.com/) and fronted by [Cloudflare](https://www.cloudflare.com/) for DNS, caching, and a bit of extra resilience.
+
+Comments are powered by [Giscus](https://giscus.app/), which uses GitHub Discussions as the backend.
+
+The newsletter runs on [Buttondown](https://buttondown.com/mitendra).
