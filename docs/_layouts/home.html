@@ -8,9 +8,18 @@ layout: default
   {%- if site.posts.size > 0 -%}
     <ul class="post-list">
       {%- for post in site.posts -%}
+      {%- assign words = post.content | number_of_words -%}
+      {%- assign read_time = words | divided_by: 200 -%}
+      {%- if read_time < 1 -%}{%- assign read_time = 1 -%}{%- endif -%}
       <li class="post-item">
         {%- assign date_format = site.minima.date_format | default: "%d %b %Y" -%}
-        <time class="post-date">{{ post.date | date: date_format }}</time>
+        <div class="post-item-meta">
+          <time class="post-date">{{ post.date | date: date_format }}</time>
+          <span class="post-read-time">· {{ read_time }} min read</span>
+          {%- if post.categories.size > 0 -%}
+            <span class="post-category-label">{{ post.categories | first }}</span>
+          {%- endif -%}
+        </div>
         <h2 class="post-item-title">
           <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
         </h2>
