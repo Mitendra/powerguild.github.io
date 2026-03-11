@@ -328,40 +328,45 @@
   margin-bottom: $spacing-unit;
 }
 
-.post-title {
-  @include relative-font-size(2.625);
-  letter-spacing: -1px;
-  line-height: 1;
+.post-content,
+.post-title,
+.post-meta {
+  font-family: $base-font-family;
+}
 
-  @include media-query($on-laptop) {
-    @include relative-font-size(2.25);
-  }
+.post-title {
+  @include relative-font-size(1.6);
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  font-weight: 600;
 }
 
 .post-content {
   margin-bottom: $spacing-unit;
 
-  h2 {
-    @include relative-font-size(2);
+  p {
+    line-height: 1.75;
+    margin-bottom: $spacing-unit * 0.6;
+  }
 
-    @include media-query($on-laptop) {
-      @include relative-font-size(1.75);
-    }
+  h2 {
+    @include relative-font-size(1.3);
+    font-weight: 600;
+    margin-top: $spacing-unit;
+    margin-bottom: $spacing-unit * 0.4;
   }
 
   h3 {
-    @include relative-font-size(1.625);
-
-    @include media-query($on-laptop) {
-      @include relative-font-size(1.375);
-    }
+    @include relative-font-size(1.1);
+    font-weight: 600;
+    margin-top: $spacing-unit * 0.8;
+    margin-bottom: $spacing-unit * 0.3;
   }
 
   h4 {
-    @include relative-font-size(1.25);
-
-    @include media-query($on-laptop) {
-      @include relative-font-size(1.125);
-    }
+    @include relative-font-size(1);
+    font-weight: 600;
+    margin-top: $spacing-unit * 0.6;
+    margin-bottom: $spacing-unit * 0.2;
   }
 }
