@@ -17,6 +17,8 @@ I currently work on infrastructure and data systems, focusing on building and op
 
 If you're curious about how complex systems work and how they can be made simpler, you'll likely find something interesting here.
 
+*Note: The opinions I express on this website are my own and not those of my current or past employers.*
+
 ---
 
 ## How this blog is built
