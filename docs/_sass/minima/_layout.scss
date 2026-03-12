@@ -344,7 +344,7 @@ html[data-theme="dark"] {
   h2 {
     @include relative-font-size(1.1);
     font-weight: 600;
-    margin-top: $spacing-unit * 1.0;
+    margin-top: 2.4rem;
     margin-bottom: $spacing-unit * 0.35;
   }
 
@@ -383,6 +383,38 @@ html[data-theme="dark"] {
   p > strong:first-child {
     display: inline-block;
     margin-top: $spacing-unit * 0.3;
+  }
+}
+
+
+
+/**
+ * Code blocks (Prism.js)
+ */
+pre[class*="language-"],
+code[class*="language-"] {
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+pre[class*="language-"] {
+  margin: $spacing-unit * 0.6 0;
+  padding: 18px 20px;
+}
+
+// Inline code (not inside pre)
+:not(pre) > code {
+  background-color: #f0f0f0;
+  color: #c7254e;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+html[data-theme="dark"] {
+  :not(pre) > code {
+    background-color: #27272a;
+    color: #f87171;
   }
 }
 
