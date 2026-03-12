@@ -12,9 +12,12 @@
   .wrapper {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding-top: 12px;
     padding-bottom: 12px;
+
+    &::after {
+      display: none;
+    }
   }
 }
 
@@ -28,6 +31,7 @@
   font-size: $small-font-size;
   color: $grey-color-dark;
   text-decoration: none;
+  white-space: nowrap;
 
   &:visited {
     color: $grey-color-dark;
@@ -413,6 +417,7 @@ html[data-theme="dark"] {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
+  align-items: center;
 
   a {
     display: inline-flex;
@@ -430,6 +435,7 @@ html[data-theme="dark"] {
       padding-right: 0;
       vertical-align: middle;
       flex-shrink: 0;
+      display: block;
     }
   }
 }
@@ -729,6 +735,11 @@ html[data-theme="dark"] {
 
   .featured-series .series-card {
     padding: 16px;
+    border-color: darken($grey-color-light, 10%);
+  }
+
+  .pub-card {
+    border-color: darken($grey-color-light, 10%);
   }
 
   .series-pagination {
