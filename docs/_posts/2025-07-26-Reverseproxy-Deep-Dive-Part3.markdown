@@ -149,7 +149,7 @@ In systems operating at moderate scale, with frequent but manageable changes and
 
 ### 3. External Discovery Systems
 
-![](/assets/images/service_discovery.png)
+![Service discovery using ZooKeeper — apps register via agent, proxy subscribes and receives notifications on change](/assets/images/service_discovery.svg)
 *Service Discovery Using ZooKeeper*
 
 When DNS isn’t good enough, large systems build their own discovery control planes, often using:

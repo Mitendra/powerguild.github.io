@@ -44,7 +44,7 @@ While many standard libraries support these steps, making them work reliably at 
 
 #### The Evolution of the HTTP Protocol
   
-![](/assets/images/http_evolution.png)  
+![HTTP protocol evolution from 0.9 to HTTP/3](/assets/images/http_evolution.svg)  
   
 
 Over the years, http spec has significantly evolved. It started with simple request lines like GET /index.html in `HTTP/0.9`, moved to newline-separated headers and persistent connections in `HTTP/1.1`, and later adopted full binary framing and multiplexing in `HTTP/2`.

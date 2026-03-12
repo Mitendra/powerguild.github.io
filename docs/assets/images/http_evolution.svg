@@ -1,0 +1,43 @@
+<svg width="700" height="175" viewBox="0 0 700 175" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,'Segoe UI',sans-serif">
+
+  <!-- Timeline baseline -->
+  <line x1="50" y1="80" x2="650" y2="80" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- HTTP/0.9 -->
+  <circle cx="50" cy="80" r="8" fill="#94a3b8" stroke="white" stroke-width="2"/>
+  <text x="50" y="54" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">HTTP/0.9</text>
+  <text x="50" y="103" text-anchor="middle" font-size="11" fill="#6b7280">1991</text>
+  <text x="50" y="122" text-anchor="middle" font-size="11" fill="#9ca3af">GET only</text>
+  <text x="50" y="138" text-anchor="middle" font-size="11" fill="#9ca3af">No headers</text>
+
+  <!-- HTTP/1.0 -->
+  <circle cx="200" cy="80" r="8" fill="#60a5fa" stroke="white" stroke-width="2"/>
+  <text x="200" y="54" text-anchor="middle" font-size="12" font-weight="600" fill="#3b82f6">HTTP/1.0</text>
+  <text x="200" y="103" text-anchor="middle" font-size="11" fill="#6b7280">1996</text>
+  <text x="200" y="122" text-anchor="middle" font-size="11" fill="#9ca3af">Headers</text>
+  <text x="200" y="138" text-anchor="middle" font-size="11" fill="#9ca3af">Status codes</text>
+
+  <!-- HTTP/1.1 -->
+  <circle cx="350" cy="80" r="8" fill="#2563eb" stroke="white" stroke-width="2"/>
+  <text x="350" y="54" text-anchor="middle" font-size="12" font-weight="600" fill="#2563eb">HTTP/1.1</text>
+  <text x="350" y="103" text-anchor="middle" font-size="11" fill="#6b7280">1997</text>
+  <text x="350" y="122" text-anchor="middle" font-size="11" fill="#9ca3af">Keep-alive</text>
+  <text x="350" y="138" text-anchor="middle" font-size="11" fill="#9ca3af">Pipelining</text>
+
+  <!-- HTTP/2 -->
+  <circle cx="500" cy="80" r="8" fill="#4f46e5" stroke="white" stroke-width="2"/>
+  <text x="500" y="54" text-anchor="middle" font-size="12" font-weight="600" fill="#4f46e5">HTTP/2</text>
+  <text x="500" y="103" text-anchor="middle" font-size="11" fill="#6b7280">2015</text>
+  <text x="500" y="122" text-anchor="middle" font-size="11" fill="#9ca3af">Multiplexing</text>
+  <text x="500" y="138" text-anchor="middle" font-size="11" fill="#9ca3af">Binary frames</text>
+
+  <!-- HTTP/3 -->
+  <circle cx="650" cy="80" r="8" fill="#7c3aed" stroke="white" stroke-width="2"/>
+  <text x="650" y="54" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">HTTP/3</text>
+  <text x="650" y="103" text-anchor="middle" font-size="11" fill="#6b7280">2022</text>
+  <text x="650" y="122" text-anchor="middle" font-size="11" fill="#9ca3af">QUIC / UDP</text>
+  <text x="650" y="138" text-anchor="middle" font-size="11" fill="#9ca3af">0-RTT connect</text>
+
+  <!-- Progression label -->
+  <text x="350" y="163" text-anchor="middle" font-size="10" fill="#cbd5e1">increasing protocol complexity →</text>
+</svg>
