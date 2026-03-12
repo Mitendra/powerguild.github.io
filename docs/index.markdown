@@ -15,3 +15,21 @@ layout: home
     </ol>
   </div>
 </div>
+
+<div class="external-pubs">
+  <p class="section-label">PUBLISHED IN</p>
+  <div class="pub-cards">
+    <div class="pub-card">
+      <p class="pub-source">USENIX ;login:</p>
+      <h3 class="pub-title">Design Tradeoffs at the Edge: Lessons from Operating a Large-Scale Reverse Proxy</h3>
+      <p class="pub-desc">Practical lessons from managing high-scale reverse proxy infrastructure — connection management, HTTP parsing, service discovery, and observability at millions of requests per second.</p>
+      <a href="https://www.usenix.org/publications/loginonline/lessons-operating-large-scale-reverse-proxy" class="pub-link" target="_blank" rel="noopener">Read on USENIX ;login: →</a>
+    </div>
+    <div class="pub-card">
+      <p class="pub-source">InfoQ</p>
+      <h3 class="pub-title">When Reverse Proxies Surprise You: Hard Lessons from Operating at Scale</h3>
+      <p class="pub-desc">How optimizations that work at small scale fail under high load, and why the most damaging failures aren't glamorous — real incidents from operating large proxy fleets.</p>
+      <a href="https://www.infoq.com/articles/scaling-reverse-proxies/" class="pub-link" target="_blank" rel="noopener">Read on InfoQ →</a>
+    </div>
+  </div>
+</div>
