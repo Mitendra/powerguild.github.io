@@ -391,13 +391,9 @@ html[data-theme="dark"] {
 /**
  * Code blocks (Prism.js)
  */
-pre,
-code {
-  font-size: 0.72rem;
-}
-
 pre[class*="language-"],
 code[class*="language-"] {
+  font-size: 0.72rem;
   border-radius: 6px;
 }
 

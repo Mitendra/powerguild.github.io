@@ -154,7 +154,7 @@ blockquote {
 pre,
 code {
   font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  @include relative-font-size(0.875);
+  font-size: 0.72rem;
 }
 
 code {
