@@ -5,6 +5,10 @@ date:   2025-08-08 08:43:56 -0800
 permalink: /reverseproxy/2025/08/08/ReverseProxy-Deep-Dive-Part4.html
 tags: [Infrastructure, ReverseProxy, "Distributed Systems"]
 excerpt: "Round-robin works fine at small scale, but at large scale load balancing becomes far more complex. Not all requests are equal, servers have varying capacity, and health signals can be misleading — this post explores what makes truly effective load balancing so difficult."
+series: Reverse Proxy Deep Dive
+series_part: 4
+series_prev_url: /reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html
+series_prev_title: "Part 3: The Hidden Complexity of Service Discovery"
 ---
 ---
 

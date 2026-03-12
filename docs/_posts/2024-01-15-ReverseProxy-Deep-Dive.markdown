@@ -5,6 +5,10 @@ date:   2024-01-15 08:43:56 -0800
 permalink: /reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html
 tags: [Infrastructure, ReverseProxy, "Distributed Systems"]
 excerpt: "Reverse proxies look simple from the outside — accept a request, forward it, return the response. But connection handling at scale involves a maze of timeouts, keep-alive semantics, protocol versions, and failure modes that reveal just how complex this layer really is."
+series: Reverse Proxy Deep Dive
+series_part: 1
+series_next_url: /reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html
+series_next_title: "Part 2: Why HTTP Parsing at the Edge Is Harder Than It Looks"
 ---
 ---
 

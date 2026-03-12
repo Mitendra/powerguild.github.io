@@ -6,12 +6,31 @@ layout: default
   {{ content }}
 
   {%- if site.posts.size > 0 -%}
-    <ul class="post-list">
+    <div class="posts-header">
+      <p class="section-label">ALL POSTS</p>
+      <div class="topics-nav">
+        <button class="topic-pill active" data-filter="all">All</button>
+        {%- assign all_tags = "" | split: "" -%}
+        {%- for post in site.posts -%}
+          {%- for tag in post.tags -%}
+            {%- unless all_tags contains tag -%}
+              {%- assign all_tags = all_tags | push: tag -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endfor -%}
+        {%- assign all_tags = all_tags | sort -%}
+        {%- for tag in all_tags -%}
+          <button class="topic-pill" data-filter="{{ tag }}">{{ tag }}</button>
+        {%- endfor -%}
+      </div>
+    </div>
+    <ul class="post-list" id="post-list">
       {%- for post in site.posts -%}
       {%- assign words = post.content | number_of_words -%}
       {%- assign read_time = words | divided_by: 200 -%}
       {%- if read_time < 1 -%}{%- assign read_time = 1 -%}{%- endif -%}
-      <li class="post-item">
+      {%- assign post_tags = post.tags | join: "||" -%}
+      <li class="post-item" data-tags="{{ post_tags }}">
         {%- assign date_format = site.minima.date_format | default: "%d %b %Y" -%}
         <div class="post-item-meta">
           <time class="post-date">{{ post.date | date: date_format }}</time>
@@ -29,6 +48,23 @@ layout: default
       </li>
       {%- endfor -%}
     </ul>
+    <script>
+      document.querySelectorAll('.topic-pill').forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          var filter = this.dataset.filter;
+          document.querySelectorAll('.topic-pill').forEach(function(p) { p.classList.remove('active'); });
+          this.classList.add('active');
+          document.querySelectorAll('.post-item').forEach(function(item) {
+            if (filter === 'all') {
+              item.style.display = '';
+            } else {
+              var tags = (item.dataset.tags || '').split('||').map(function(t) { return t.trim(); });
+              item.style.display = tags.indexOf(filter) !== -1 ? '' : 'none';
+            }
+          });
+        });
+      });
+    </script>
   {%- endif -%}
 
 </div>

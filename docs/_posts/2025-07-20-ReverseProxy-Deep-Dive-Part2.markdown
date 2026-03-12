@@ -5,6 +5,12 @@ date:   2025-07-20 08:43:56 -0800
 permalink: /reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html
 tags: [Infrastructure, ReverseProxy, "Distributed Systems"]
 excerpt: "HTTP parsing sounds straightforward until you account for decades of protocol evolution, browser quirks, malformed requests, and smuggling attacks. Getting HTTP right at the edge is one of the hardest — and most security-critical — problems in proxy development."
+series: Reverse Proxy Deep Dive
+series_part: 2
+series_prev_url: /reverseproxy/2024/01/15/ReverseProxy-Deep-Dive.html
+series_prev_title: "Part 1: The Complexity of Connection Handling"
+series_next_url: /reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html
+series_next_title: "Part 3: The Hidden Complexity of Service Discovery"
 ---
 ---
 

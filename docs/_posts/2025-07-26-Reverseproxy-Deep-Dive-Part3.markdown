@@ -5,6 +5,12 @@ date:   2025-07-26 08:43:56 -0800
 permalink: /reverseproxy/2025/07/26/Reverseproxy-Deep-Dive-Part3.html
 tags: [Infrastructure, ReverseProxy, "Distributed Systems"]
 excerpt: "Service discovery sounds simple — keep an up-to-date list of healthy upstream hosts. But doing it accurately across thousands of services, with fast failure detection and minimal overhead, is one of the hardest problems a proxy has to solve."
+series: Reverse Proxy Deep Dive
+series_part: 3
+series_prev_url: /reverseproxy/2025/07/20/ReverseProxy-Deep-Dive-Part2.html
+series_prev_title: "Part 2: Why HTTP Parsing at the Edge Is Harder Than It Looks"
+series_next_url: /reverseproxy/2025/08/08/ReverseProxy-Deep-Dive-Part4.html
+series_next_title: "Part 4: Why Load Balancing at Scale is Hard"
 ---
 ---
 

@@ -23,15 +23,30 @@ layout: default
     {{ content }}
   </div>
 
+  {%- if page.series -%}
+  <nav class="series-pagination">
+    {%- if page.series_prev_url -%}
+    <a class="series-pagination-link series-pagination-prev" href="{{ page.series_prev_url | relative_url }}">
+      <span class="series-pagination-dir">← Previous in series</span>
+      <span class="series-pagination-title">{{ page.series_prev_title }}</span>
+    </a>
+    {%- endif -%}
+    {%- if page.series_next_url -%}
+    <a class="series-pagination-link series-pagination-next" href="{{ page.series_next_url | relative_url }}">
+      <span class="series-pagination-dir">Next in series →</span>
+      <span class="series-pagination-title">{{ page.series_next_title }}</span>
+    </a>
+    {%- endif -%}
+  </nav>
+  {%- endif -%}
+
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
   {%- endif -%}
 
- 
   {%- if site.comments.giscus.enabled -%}
     {% include giscuss.html %}
   {%- endif -%}
-
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
