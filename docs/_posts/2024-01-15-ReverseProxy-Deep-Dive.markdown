@@ -25,7 +25,7 @@ This post is part of a series.
 
 A reverse proxy is a critical piece of software commonly found in various setups within a distributed system. You may have encountered it as a proxy enabling service mesh, a load balancer distributing the load among different database instances, or an edge proxy hiding the complexity behind a site.
   
-![](/assets/images/reverse_proxy.png)  
+![Clients accessing a URL, reverse proxy receiving all requests and distributing to N app servers](/assets/images/reverse_proxy.svg)  
   
 
 Several excellent reverse proxies exist, such as HAProxy, Nginx, Envoy, Caddy, Traefik, Zuul, Apache Traffic Server, etc. Each has its strengths and weaknesses, often used in specific contexts. For service mesh, Envoy/Linkerd are common choices, while for edge proxy, Nginx/HAProxy are preferred. For caching proxy, ATS is a great option, and HAProxy shines in load balancing among different database instances.
