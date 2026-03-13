@@ -6,7 +6,7 @@ tags: [Microservices, "Distributed Systems"]
 excerpt: "Well-designed microservices make development faster and deployments simpler, but getting there requires discipline. Seven practical tips — from correlation IDs to idempotency to interface contracts — that make a real difference at scale."
 --- 
 
-![](/assets/images/seven-lemons.png)  
+![](/assets/images/seven-lemons.webp)  
   
 Well designed microservices can make our life so much easier. From design to development to rolling out to production, it can help improve all the aspects. While microservices have been around for years, and best practices have been evolving over time, dealing with microservices at a larger scale has not been easy. For teams who are new to microservices, sometimes the complexity may be overwhelming.
   

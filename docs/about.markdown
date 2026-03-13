@@ -8,7 +8,7 @@ permalink: /about/
   <div class="about-intro-text">
     <p>Welcome to my corner of the internet. I'm Mitendra, a software engineer interested in understanding complexity in software systems, especially distributed systems. Large systems often appear chaotic at first, but with the right perspective they tend to reveal patterns.</p>
   </div>
-  <img src="/assets/images/avatar.jpg" alt="Mitendra Mahto" class="about-avatar" />
+  <img src="/assets/images/avatar.webp" alt="Mitendra Mahto" class="about-avatar" />
 </div>
 
 This blog is where I explore those patterns and document lessons from building and operating large-scale systems. My goal is to understand what makes systems complex and how the right abstractions and design choices can make them simpler and more reliable.

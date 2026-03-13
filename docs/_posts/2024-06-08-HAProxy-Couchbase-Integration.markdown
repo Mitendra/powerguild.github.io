@@ -38,7 +38,7 @@ Moreover, the current implementations in those libraries do not seem to support 
 5. The virtual bucket-to-node mapping is not static and can change based on the number of nodes in the cluster.
 
 ### Simplified K/V Memcached Protocol
-![](/assets/images/cb_request_response.jpeg)  
+![](/assets/images/cb_request_response.webp)  
 1. A stateful TCP protocol. Commnads need to run in a speceific sequence/context.
 2. A basic CB request consists of:
    1. A 24-byte request/response header.

@@ -6,7 +6,7 @@ tags: ["Distributed Systems", Microservices]
 excerpt: "gRPC and HTTP/2 promise faster, more efficient inter-service communication — but they aren't magic bullets. A look at the real benefits of protobuf and multiplexing, and the overlooked pitfalls that matter before you commit to gRPC in production."
 ---  
   
-![](/assets/images/light_bulb.png)  
+![](/assets/images/light_bulb.webp)  
   
 Go and gRPC have become a popular choice for microservices of late. gRPC is an efficient over the wire communication protocol. Built on top of http/2 and protobuf (in theory other serialization protocols can also be supported), this is supposed to be faster, with lesser network overhead and an efficient protocol.  
   

@@ -6,7 +6,7 @@ tags: [Engineering]
 excerpt: "Switching languages rarely solves the underlying problem. Writing simple code is harder than it sounds — this post explores what actually makes code readable and maintainable: clear naming, minimal state, and avoiding cleverness at the cost of intent."
 ---  
   
-![](/assets/images/straight_line.png)  
+![](/assets/images/straight_line.webp)  
   
 Simple is beautiful is the golden mantra in programming. While efficiency and performance are major factors, simplicity and maintenance cost wins over them in many use cases. These become a deciding factor while choosing a programming language, exploring features in a language or even deciding on standard coding practices within an organization. There are often debates on whether a specific programming language makes it easier to write simpler and maintainable code; quite often projects drift away from a more efficient and performant languages to other languages as the code base starts to grow and number of people working on code base starts to increase and so on.  
   

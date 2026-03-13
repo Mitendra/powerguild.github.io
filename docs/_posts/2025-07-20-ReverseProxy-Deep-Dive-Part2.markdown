@@ -44,7 +44,7 @@ While many standard libraries support these steps, making them work reliably at 
 
 #### The Evolution of the HTTP Protocol
   
-![](/assets/images/http_evolution.png)  
+![](/assets/images/http_evolution.webp)  
   
 
 Over the years, http spec has significantly evolved. It started with simple request lines like GET /index.html in `HTTP/0.9`, moved to newline-separated headers and persistent connections in `HTTP/1.1`, and later adopted full binary framing and multiplexing in `HTTP/2`.
@@ -114,7 +114,7 @@ Handling quotes in Set-Cookie headers, whether single, double, or escaped, adds 
 
 #### Security: The Proxy Is the First Line of Defense
 
-![](/assets/images/http_smuggling.png)  
+![](/assets/images/http_smuggling.webp)  
 
 Even with established standards and defined behaviors, there are always bad actors who exploit gaps to try to break the system. Proxies deployed at the edge are particularly exposed to such clients and must be prepared to handle these cases with extreme caution.
 

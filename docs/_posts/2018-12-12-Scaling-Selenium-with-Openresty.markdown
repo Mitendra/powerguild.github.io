@@ -6,7 +6,7 @@ tags: [Infrastructure, Scalability]
 excerpt: "Selenium Grid scales browser nodes easily, but scaling the hub itself is a different problem. This post covers how we used OpenResty and Lua to build session-aware load balancing on top of Selenium, enabling true high availability for UI test infrastructure."
 ---  
   
-![](/assets/images/highrise_one.png) 
+![](/assets/images/highrise_one.webp) 
   
 Selenium has been the de facto automation standard/tool for browser/UI automation for quite sometime.  
   

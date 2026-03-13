@@ -44,7 +44,7 @@ In the following sections, we’ll explore various approaches to service discove
 ## Ways to Discover Hosts
 
 
-![](/assets/images/haproxy_config_service_discovery.png)
+![](/assets/images/haproxy_config_service_discovery.webp)
 *HAProxy config showing static ip, dns slots, health-check, health-check with different frequency*
 
 [HAProxy Config Example Github gist](https://gist.github.com/Mitendra/69d1d378e0a17e3747947cc5b1f4cc1a)
@@ -149,7 +149,7 @@ In systems operating at moderate scale, with frequent but manageable changes and
 
 ### 3. External Discovery Systems
 
-![](/assets/images/service_discovery.png)
+![](/assets/images/service_discovery.webp)
 *Service Discovery Using ZooKeeper*
 
 When DNS isn’t good enough, large systems build their own discovery control planes, often using:

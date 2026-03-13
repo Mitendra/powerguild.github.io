@@ -49,7 +49,7 @@ Lets also assume we have a common header request-id which will identify the whol
     
 ### Test setup
 
-![Test Setup with Proxy layer handling proxying and fault injection](/assets/images/fault_injection.png)
+![Test Setup with Proxy layer handling proxying and fault injection](/assets/images/fault_injection.webp)
 
 ### The routing/proxy component  
   

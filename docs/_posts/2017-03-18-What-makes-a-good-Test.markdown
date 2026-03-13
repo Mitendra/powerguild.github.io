@@ -6,7 +6,7 @@ tags: [Engineering, Testing]
 excerpt: "Not all tests are equal — many that pass don't actually prove the system is healthy, and failing tests don't always mean something is broken. Here are the properties that separate good tests from ones that slowly become noise."
 --- 
   
-![](/assets/images/laptiop_open.png)  
+![](/assets/images/laptiop_open.webp)  
       
 Test cases are meant to check the health of the system and find issues if certain part of the system is not working as expected. Although this seems pretty obvious and trivial but in practice it’s still something engineering teams struggle to achieve with ease. There would be scenarios when the tests succeed but system is not healthy and similarly failing tests do not always reflect a problem in the system. Although all tests are mostly written with good intent, all of them don’t turn out to be good one. Many of them actually becomes useless over a period of time.  
   
@@ -20,7 +20,7 @@ Success or failure of a test case should be able to tell whether a system or par
   
 1. Test data randomness  
   
-![](/assets/images/random-dice.png)  
+![](/assets/images/random-dice.webp)  
   
 Randomness of data is preferred in many cases. One of the most dominant reason for doing so is to reduce overall runtime. In theory you may have thousands of combinations of test data and ideally you would like to test everything. But tests are also resource intensive, it consumes CPU cycles, memory and most importantly time.  
   
@@ -34,7 +34,7 @@ That’s how it achieves deterministic nature although being random actually.
   
 2. Tests affecting the state of the system  
 
-![](/assets/images/tension-among-states.png)     
+![](/assets/images/tension-among-states.webp)     
   
 Tests are written typically to work in isolation but the underlying system under test may change its state based on the test execution. So when you run the next test previous tests data may impact the result of next test.  
 E.g. If you have test for doing a payment from account A to B, after the test account A’s balance may get updated, so if subsequent test case uses the same account it may not have enough balance to do the payment.  
@@ -62,13 +62,13 @@ The number of tests grows exponentially with every new feature that gets added i
   
 ## A good test not only tells there is a problem but also narrows down to the specific component/feature or code path  
   
-![](/assets/images/dont_show_tell_me.png)  
+![](/assets/images/dont_show_tell_me.webp)  
     
 Even though the objective of a test is to identify a systemic issue but the larger goal of having a test is to help identify the broken piece and get it fixed quickly. If a test failure is very generic it becomes very difficult to debug and find the actual issues resulting into delayed delivery. The test failure points should be focused, specific and should contains enough information to debug the issue.  
 
 ## A good test is easy to maintain  
   
-![](/assets/images/easy_to_maintain.png)  
+![](/assets/images/easy_to_maintain.webp)  
   
 The life expectancy of a test code is much higher than the actual product code. So a large part of that remains in maintenance mode. Changes in product behavior result into corresponding change in test behavior. Such change in behavior causes changes in test code quite frequently. The changes could be as simple as change of some expected response code or it could be as huge as change of whole request/ response or sometime making the test code completely redundant. Since the changes are typically quite frequent it’s important these can be done quickly. Any test where maintenance cost is high is doomed to be skipped or ignored pretty soon.  
   
@@ -78,7 +78,7 @@ Engineer’s are generally pretty much emotional about the languages and tools t
 
 ## A good test is easy to find based on the use case and failure points  
   
-![](/assets/images/find_user.png) 
+![](/assets/images/find_user.webp) 
 
 While most of the time tests are run to find the issue, many times it’s the other way round. You find an issue, fix it and now want to verify if the fix is correct or not. If a test is not easy to find based on the use case, many times people tend to run the whole test suite, which is not only time and resource consuming it doesn’t give enough confidence whether the required verification is done or not. This fear causes people to run even larger set of tests causing a significant overhead in delivering the fix. An easily discoverable test is the one which are typically run more often and catches more issues.  
   

@@ -23,7 +23,7 @@ This post is part of a series.
 
 ## Load Balancing
 
-![](/assets/images/round_robin.jpeg)
+![](/assets/images/round_robin.webp)
 One of the most critical roles for a reverse proxy is load balancing requests across different upstream hosts. From a list of upstream servers, the proxy must decide where each incoming request should go.
 
 The primary goals of load balancing are:

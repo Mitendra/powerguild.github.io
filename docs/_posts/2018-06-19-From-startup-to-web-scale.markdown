@@ -6,7 +6,7 @@ tags: [Scalability, "Distributed Systems"]
 excerpt: "A web service starts with a single box and a handful of users, then it grows. This post traces the journey from a naive startup setup through logging, redundancy, caching, and sharding — a gentle introduction to scaling challenges every growing system faces."
 ---  
   
-![](/assets/images/highrise.png)  
+![](/assets/images/highrise.webp)  
   
 
 This post serves as a gentle introduction to the concepts of scaling a web service and the various phases it goes through. Subsequent posts will provide more details about many of the concepts introduced here. 
