@@ -239,6 +239,11 @@
   align-items: flex-start;
   gap: $spacing-unit;
   margin-bottom: $spacing-unit * 0.6;
+
+  @include media-query($on-palm) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
 }
 
 .about-intro-text {
@@ -261,7 +266,10 @@
   flex-shrink: 0;
 
   @include media-query($on-palm) {
-    display: none;
+    width: 120px !important;
+    height: 120px !important;
+    max-width: 120px !important;
+    max-height: 120px !important;
   }
 }
 
