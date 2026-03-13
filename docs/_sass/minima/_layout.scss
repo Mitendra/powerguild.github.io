@@ -457,27 +457,22 @@ html[data-theme="dark"] {
 .site-branding-social {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 6px;
   align-items: center;
 
   a {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
     font-size: $small-font-size;
-    line-height: 1;
     color: $grey-color;
     text-decoration: none;
+    border-bottom: 1px solid transparent;
 
     &:visited { color: $grey-color; }
-    &:hover { color: $text-color; text-decoration: none; }
+    &:hover { color: $text-color; border-bottom-color: $text-color; }
+  }
 
-    .svg-icon {
-      padding-right: 0;
-      vertical-align: middle;
-      flex-shrink: 0;
-      display: block;
-    }
+  .social-sep {
+    color: $grey-color-light;
+    font-size: $small-font-size;
   }
 }
 
@@ -804,7 +799,8 @@ html[data-theme="dark"] {
   .site-branding { border-bottom-color: #3f3f46; }
   .site-branding-name { color: #f4f4f5; }
   .site-branding-tagline { color: #71717a; }
-  .site-branding-social a { color: #71717a; &:hover { color: #f4f4f5; } &:visited { color: #71717a; } }
+  .site-branding-social a { color: #71717a; &:hover { color: #f4f4f5; border-bottom-color: #f4f4f5; } &:visited { color: #71717a; } }
+  .site-branding-social .social-sep { color: #3f3f46; }
 
   .section-label { color: #71717a; }
 
