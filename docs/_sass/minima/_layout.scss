@@ -495,8 +495,10 @@ html[data-theme="dark"] {
   color: $grey-color;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: $spacing-unit * 0.4;
+  padding-left: 10px;
+  border-left: 3px solid $brand-color;
 }
 
 
@@ -873,7 +875,7 @@ html[data-theme="dark"] {
   .site-branding-social a { color: #71717a; text-decoration-color: #3f3f46; &:hover { color: #f4f4f5; text-decoration-color: #f4f4f5; } &:visited { color: #71717a; } }
   .site-branding-social .social-sep { color: #3f3f46; }
 
-  .section-label { color: #71717a; }
+  .section-label { color: #71717a; border-left-color: #60a5fa; }
 
   .speaking { border-bottom-color: #3f3f46; }
   .speaking-card { border-color: #3f3f46; background-color: #1e1e22; &:hover { border-color: #60a5fa; } }
