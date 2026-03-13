@@ -2,6 +2,17 @@
 layout: home
 ---
 
+<div class="speaking">
+  <p class="section-label">SPEAKING</p>
+  <div class="speaking-card">
+    <p class="speaking-event">RSAC 2026 · Monday, Mar 23 · 1:10 PM PDT</p>
+    <h2 class="speaking-title"><a href="https://path.rsaconference.com/flow/rsac/us26/FullAgenda/page/catalog/session/1756071120013001by54" target="_blank" rel="noopener">Beyond Zero Trust: Continuous Validation for Modern Enterprise Security</a></h2>
+    <p class="speaking-desc">Why static Zero Trust is insufficient — introducing Multidimensional Continuous Validation, where trust is re-evaluated throughout each session using mTLS, SSO, and runtime signals with open-source technologies.</p>
+    <p class="speaking-speakers">With Sanjay Singh · Staff Software Engineer, LinkedIn</p>
+    <a href="https://path.rsaconference.com/flow/rsac/us26/FullAgenda/page/catalog/session/1756071120013001by54" class="speaking-link" target="_blank" rel="noopener">View session on RSAC →</a>
+  </div>
+</div>
+
 <div class="featured-series">
   <p class="section-label">FEATURED SERIES</p>
   <div class="series-card">
