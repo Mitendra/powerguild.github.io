@@ -59,12 +59,21 @@
 
     <div id="progress-bar"></div>
     <script>
-      window.onscroll = function () {
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        document.getElementById("progress-bar").style.width = scrolled + "%";
-      };
+      (function () {
+        var bar = document.getElementById("progress-bar");
+        var ticking = false;
+        window.addEventListener("scroll", function () {
+          if (!ticking) {
+            requestAnimationFrame(function () {
+              var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+              var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+              bar.style.width = (winScroll / height) * 100 + "%";
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      })();
 
       document.getElementById('theme-toggle').addEventListener('click', function () {
         var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -77,24 +86,7 @@
         }
       });
 
-      // Copy button for code blocks
-      document.querySelectorAll('pre').forEach(function (pre) {
-        var btn = document.createElement('button');
-        btn.className = 'code-copy-btn';
-        btn.textContent = 'Copy';
-        pre.style.position = 'relative';
-        pre.appendChild(btn);
-        btn.addEventListener('click', function () {
-          var code = pre.querySelector('code');
-          navigator.clipboard.writeText(code ? code.innerText : pre.innerText).then(function () {
-            btn.textContent = 'Copied!';
-            setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
-          });
-        });
-      });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
   </body>
 
 </html>

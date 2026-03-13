@@ -34,7 +34,7 @@ plugins:
   - jekyll-sitemap
 
 markdown: kramdown
-highlighter: none
+highlighter: rouge
 comments:
   giscus:
     enabled: true

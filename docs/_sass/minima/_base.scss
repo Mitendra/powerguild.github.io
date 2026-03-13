@@ -279,30 +279,6 @@ $accent-color: #3A7AFE;
   // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.code-copy-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #abb2bf;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-family: $base-font-family;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-  }
-}
-
-pre:hover .code-copy-btn {
-  opacity: 1;
-}
 
 hr {
   margin: 0;
