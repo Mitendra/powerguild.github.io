@@ -463,11 +463,12 @@ html[data-theme="dark"] {
   a {
     font-size: $small-font-size;
     color: $grey-color;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
+    text-decoration: underline;
+    text-decoration-color: $grey-color;
+    text-underline-offset: 2px;
 
     &:visited { color: $grey-color; }
-    &:hover { color: $text-color; border-bottom-color: $text-color; }
+    &:hover { color: $text-color; text-decoration-color: $text-color; }
   }
 
   .social-sep {
@@ -799,7 +800,7 @@ html[data-theme="dark"] {
   .site-branding { border-bottom-color: #3f3f46; }
   .site-branding-name { color: #f4f4f5; }
   .site-branding-tagline { color: #71717a; }
-  .site-branding-social a { color: #71717a; &:hover { color: #f4f4f5; border-bottom-color: #f4f4f5; } &:visited { color: #71717a; } }
+  .site-branding-social a { color: #71717a; text-decoration-color: #3f3f46; &:hover { color: #f4f4f5; text-decoration-color: #f4f4f5; } &:visited { color: #71717a; } }
   .site-branding-social .social-sep { color: #3f3f46; }
 
   .section-label { color: #71717a; }
