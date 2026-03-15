@@ -3,7 +3,65 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {%- seo -%}
-  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  <style>
+    /* Critical CSS: above-the-fold content renders without blocking on external stylesheet */
+    body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}
+    body{font:400 18px/1.65 system-ui,-apple-system,'Segoe UI',sans-serif;color:#1a1a1a;background:#fff;-webkit-text-size-adjust:100%;display:flex;min-height:100vh;flex-direction:column}
+    h1,h2,h3,h4,h5,h6,p,blockquote,pre,ul,ol,dl,figure{margin-bottom:15px}
+    main{display:block}
+    a{color:#2563eb;text-decoration:none}
+    a:visited{color:#1d4ed8}
+    a:hover{color:#1a1a1a;text-decoration:underline}
+    .wrapper{max-width:calc(720px - 60px);margin:0 auto;padding:0 30px}
+    .wrapper::after{content:"";display:table;clear:both}
+    .site-header{border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:100;background:#fff}
+    .site-header .wrapper{display:flex;align-items:center;padding-top:12px;padding-bottom:12px}
+    .site-header .wrapper::after{display:none}
+    .site-nav{display:flex;align-items:center;gap:20px}
+    .site-nav-link{font-size:14.994px;color:#424242;text-decoration:none;white-space:nowrap}
+    .site-nav-link:visited{color:#424242}
+    .theme-toggle{background:#e8e8e8;border:1px solid #dbdbdb;border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;padding:0;line-height:1;transition:background .15s ease}
+    .page-content{padding:30px 0;flex:1}
+    .site-branding{padding:2.5rem 0 2rem;border-bottom:1px solid #e8e8e8}
+    .site-branding-name{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-.03em;color:#1a1a1a;line-height:1.1;margin-bottom:.5rem}
+    .site-branding-tagline{font-size:16.2px;color:#828282;line-height:1.4;margin-bottom:.9rem}
+    .site-branding-social{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+    .site-branding-social a{font-size:14.994px;color:#828282;text-decoration:underline;text-decoration-color:#828282;text-underline-offset:2px}
+    .site-branding-social a:visited{color:#828282}
+    .site-branding-social .social-sep{color:#e8e8e8;font-size:14.994px}
+    .section-label{font-size:.7rem;color:#828282;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:12px;padding-left:10px;border-left:3px solid #2563eb}
+    .speaking{margin-bottom:30px;padding-bottom:30px;border-bottom:1px solid #e8e8e8}
+    .speaking-card{border:1px solid #dbdbdb;border-radius:8px;padding:22px 24px;background:#f8fafc}
+    .speaking-event{font-size:.72rem;color:#828282;letter-spacing:.08em;text-transform:uppercase;font-weight:500;margin-bottom:4px}
+    .speaking-title{font-size:19.8px;font-weight:600;margin-bottom:8px}
+    .speaking-title a{color:#1a1a1a;text-decoration:none}
+    .speaking-desc{font-size:14.994px;color:#828282;line-height:1.5;margin-bottom:8px}
+    .speaking-speakers{font-size:14.994px;color:#828282;margin-bottom:8px}
+    .speaking-link{font-size:14.994px;font-weight:500;color:#2563eb;text-decoration:none}
+    #progress-bar{position:fixed;top:0;left:0;height:4px;width:0%;background:#3A7AFE;transition:width .2s ease-out;z-index:9999}
+    /* Critical dark mode */
+    html[data-theme="dark"]{background:#18181b;color:#e4e4e7}
+    html[data-theme="dark"] body{background:#18181b;color:#e4e4e7}
+    html[data-theme="dark"] a{color:#60a5fa}
+    html[data-theme="dark"] .site-header{border-bottom-color:#3f3f46;background:#18181b}
+    html[data-theme="dark"] .site-nav-link{color:#a1a1aa}
+    html[data-theme="dark"] .theme-toggle{background:#27272a;border-color:#3f3f46;color:#e4e4e7}
+    html[data-theme="dark"] .site-branding{border-bottom-color:#3f3f46}
+    html[data-theme="dark"] .site-branding-name{color:#f4f4f5}
+    html[data-theme="dark"] .site-branding-tagline{color:#71717a}
+    html[data-theme="dark"] .site-branding-social a{color:#71717a;text-decoration-color:#3f3f46}
+    html[data-theme="dark"] .site-branding-social .social-sep{color:#3f3f46}
+    html[data-theme="dark"] .section-label{color:#71717a;border-left-color:#3b82f6}
+    html[data-theme="dark"] .speaking{border-bottom-color:#3f3f46}
+    html[data-theme="dark"] .speaking-card{border-color:#3f3f46;background:#1e1e22}
+    html[data-theme="dark"] .speaking-event{color:#71717a}
+    html[data-theme="dark"] .speaking-title a{color:#f4f4f5}
+    html[data-theme="dark"] .speaking-desc{color:#a1a1aa}
+    html[data-theme="dark"] .speaking-speakers{color:#71717a}
+    html[data-theme="dark"] .speaking-link{color:#60a5fa}
+  </style>
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}"></noscript>
   {%- feed_meta -%}
   {% include custom-head.html %}
 
